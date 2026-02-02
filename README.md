@@ -43,6 +43,10 @@ Om något av dessa datum är helg, flyttas alla tre mötesdagar – oftast tidig
 
 ## 🚀 Komma igång
 
+### 🌐 Live Demo
+
+**Besök den publicerade versionen:** [https://kentlundgren.github.io/Bokslutstider/](https://kentlundgren.github.io/Bokslutstider/)
+
 ### Förutsättningar
 
 - En modern webbläsare (Chrome, Firefox, Edge, Safari)
@@ -52,7 +56,7 @@ Om något av dessa datum är helg, flyttas alla tre mötesdagar – oftast tidig
 
 1. Klona projektet:
 ```bash
-git clone https://github.com/DITT-ANVÄNDARNAMN/bokslutstider.git
+git clone https://github.com/kentlundgren/bokslutstider.git
 ```
 
 2. Öppna `index.html` i din webbläsare:
@@ -123,10 +127,12 @@ Ekonom/Controller
 Kultur- och Fritidsförvaltningen  
 Simrishamns kommun
 
-## 📚 Läs mer
+## 🔗 Länkar
 
-- [Git och GitHub Guide](GitHub.html) - Lär dig versionhantering
-- [Simrishamns kommun](https://simrishamn.se)
+- **Live Demo:** [https://kentlundgren.github.io/Bokslutstider/](https://kentlundgren.github.io/Bokslutstider/)
+- **GitHub Repo:** [https://github.com/kentlundgren/Bokslutstider](https://github.com/kentlundgren/Bokslutstider)
+- **Git och GitHub Guide:** [GitHub.html](GitHub.html) - Lär dig versionhantering
+- **Simrishamns kommun:** [simrishamn.se](https://simrishamn.se)
 
 ---
 
