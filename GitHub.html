@@ -635,6 +635,47 @@
         <section class="section">
             <h2>🆘 Vanliga problem och lösningar</h2>
             
+            <h3>Problem: Cursor "står och snurrar" vid Commit & Push ⚠️ VANLIGT!</h3>
+            <div class="warning-box">
+                <strong>Symptom:</strong> "Commit & Push"-knappen står bara och snurrar/spinner, ingenting händer.<br><br>
+                
+                <img src="star_bara_och_snurrar.png" alt="Cursor spinner problem" style="max-width: 400px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin: 1rem 0;">
+                
+                <strong>Orsaker:</strong><br>
+                1. Git-processen har hängt sig i bakgrunden<br>
+                2. Autentisering väntar i bakgrunden (du ser inte prompten)<br>
+                3. Remote är inte konfigurerad<br>
+                4. Konflikt med credentials<br><br>
+                
+                <strong>Lösning 1: Döda hängande Git-processer (SNABBAST)</strong><br>
+                Öppna PowerShell och kör:
+                <div class="command">
+                    <code>taskkill /F /IM git.exe</code>
+                </div>
+                Detta dödar alla Git-processer. Sedan kan du:<br>
+                • Starta om Cursor OCH<br>
+                • Pusha manuellt via PowerShell: <code>git push</code><br><br>
+                
+                <strong>Lösning 2: Pusha via PowerShell istället</strong><br>
+                Ignorera Cursor-knappen och använd PowerShell:
+                <div class="command">
+                    <code>cd "din-projektmapp"</code><br>
+                    <code>git push</code>
+                </div>
+                
+                <strong>Lösning 3: Använd GitHub Desktop</strong><br>
+                Om problemet fortsätter, använd <a href="https://desktop.github.com/" target="_blank">GitHub Desktop</a> istället.<br>
+                Det är stabilare och visar autentiseringsdialoger tydligare.<br><br>
+                
+                <strong>Förebyggande åtgärder:</strong><br>
+                • Konfigurera autentisering en gång för alla (Personal Access Token eller SSH)<br>
+                • Använd GitHub Desktop för mer stabila pushes<br>
+                • Kontrollera att remote är konfigurerad: <code>git remote -v</code><br><br>
+                
+                <strong>💡 Tips:</strong> Om det fortsätter hänga sig, stäng Cursor helt, döda Git-processer, 
+                och starta om. Sedan pusha via PowerShell eller GitHub Desktop istället för Cursor-knappen.
+            </div>
+            
             <h3>Problem: "Permission denied" när du pushar</h3>
             <div class="concept-box">
                 <strong>Lösning:</strong> Du behöver autentisera dig mot GitHub. Använd antingen:<br>
@@ -645,6 +686,33 @@
             <h3>Problem: "Please tell me who you are"</h3>
             <div class="concept-box">
                 <strong>Lösning:</strong> Kör steg 2 ovan för att konfigurera ditt namn och e-post.
+            </div>
+            
+            <h3>Problem: COMMIT_EDITMSG öppnas - kan inte skriva i filen</h3>
+            <div class="warning-box">
+                <strong>Symptom:</strong> När du klickar "Commit & Push" öppnas filen <code>.git/COMMIT_EDITMSG</code> 
+                i Cursor, men du kan inte skriva i den. Git väntar på ett commit-meddelande.<br><br>
+                
+                <strong>Orsak:</strong> Du klickade "Commit & Push" utan att först skriva ett commit-meddelande 
+                i Cursor's "Message"-ruta. Git försöker öppna Cursor som texteditor, men det fungerar inte korrekt.<br><br>
+                
+                <strong>Lösning:</strong><br>
+                1. Stäng filen <code>COMMIT_EDITMSG</code> utan att spara (Ctrl+W → "Don't Save")<br>
+                2. Döda Git-processen:
+                <div class="command">
+                    <code>taskkill /F /IM git.exe</code>
+                </div>
+                3. Stäng Cursor helt<br>
+                4. Committa via PowerShell med meddelande direkt:
+                <div class="command">
+                    <code>cd "din-projektmapp"</code><br>
+                    <code>git add .</code><br>
+                    <code>git commit -m "Ditt commit-meddelande här"</code><br>
+                    <code>git push</code>
+                </div>
+                
+                <strong>💡 Förebyggande:</strong> Skriv ALLTID ett commit-meddelande i Cursor's "Message"-ruta 
+                (ovanför "Commit & Push"-knappen) INNAN du klickar på knappen. Då slipper du detta problem helt!
             </div>
             
             <h3>Problem: Råkat committa fel fil</h3>

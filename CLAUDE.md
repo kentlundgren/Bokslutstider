@@ -306,19 +306,44 @@ temp/
 
 ## 🐛 Vanliga problem och lösningar
 
-### Problem: Cursor står och "snurrar" på push
+### Problem: Cursor står och "snurrar" på Commit & Push ⚠️ MYCKET VANLIGT!
 
-**Orsak:** Git-process har hängt sig
+**Symptom:** "Commit & Push"-knappen bara spinner/snurrar, ingenting händer.
 
-**Lösning:**
+![Cursor spinner problem](star_bara_och_snurrar.png)
+
+**Orsaker:**
+1. Git-processen har hängt sig i bakgrunden
+2. Autentisering väntar i bakgrunden (du ser inte prompten)
+3. Remote är inte konfigurerad korrekt
+4. Konflikt med credentials/tokens
+
+**Lösning 1: Döda hängande Git-processer (SNABBAST)**
 ```powershell
-# Döda hängande Git-processer
+# I PowerShell:
 taskkill /F /IM git.exe
 ```
-
-Sedan:
+Detta dödar alla Git-processer. Sedan:
 - Starta om Cursor
-- Eller pusha manuellt via PowerShell: `git push`
+- ELLER pusha manuellt: `git push`
+
+**Lösning 2: Ignorera Cursor-knappen och pusha via PowerShell**
+```powershell
+cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"
+git push
+```
+
+**Lösning 3: Använd GitHub Desktop**
+Om problemet fortsätter, använd [GitHub Desktop](https://desktop.github.com/) istället.
+- Stabilare än Cursor för Git-operationer
+- Tydligare autentiseringsdialoger
+- Visuell feedback på vad som händer
+
+**Förebyggande åtgärder:**
+- Konfigurera autentisering permanent (Personal Access Token eller SSH-nycklar)
+- Använd GitHub Desktop för pushes istället för Cursor-knappen
+- Kontrollera remote: `git remote -v` innan push
+- Se till att du är autentiserad: `git config credential.helper`
 
 ### Problem: Remote finns inte
 
