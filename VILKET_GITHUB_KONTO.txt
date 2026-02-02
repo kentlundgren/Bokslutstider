@@ -1,0 +1,134 @@
+═══════════════════════════════════════════════════════════════════════════
+  VILKET GITHUB-KONTO ÄR JAG KOPPLAD TILL?
+═══════════════════════════════════════════════════════════════════════════
+
+SNABBT SVAR:
+------------
+Du är kopplad till: https://github.com/kentlundgren/
+E-post: lundgren.kent@gmail.com
+
+Detta betyder att när du pushar detta projekt kommer det hamna på 
+KENTLUNDGREN-kontot (ditt personliga konto).
+
+
+DINA TVÅ GITHUB-KONTON:
+------------------------
+
+1. 🏠 KENTLUNDGREN (PERSONLIGT - AKTIVT NU)
+   URL: https://github.com/kentlundgren/
+   E-post: lundgren.kent@gmail.com
+   Användning: Personliga projekt (som detta Bokslutstider-projekt)
+   Status: ✅ DETTA KONTO ANVÄNDS NU
+
+2. 💼 LUNDGREN9 (JOBB - INAKTIVT)
+   URL: https://github.com/lundgren9
+   E-post: (Annan e-post, troligen arbetsrelaterad)
+   Användning: Poolia-projekt, jobbrelaterade saker
+   Status: ⭕ Inaktivt för detta projekt
+
+
+HUR KAN JAG VETA VILKET KONTO SOM ANVÄNDS?
+-------------------------------------------
+
+Kör dessa kommandon i PowerShell:
+
+    git config user.name
+    → Visar: "Kent Lundgren"
+
+    git config user.email
+    → Visar: "lundgren.kent@gmail.com"
+
+E-POSTADRESSEN avgör vilket GitHub-konto som används!
+
+
+NÄR HAMNAR PROJEKTET PÅ VILKET KONTO?
+--------------------------------------
+
+✅ lundgren.kent@gmail.com → kentlundgren-kontot
+❌ annan-epost@exempel.se → lundgren9-kontot
+
+Eftersom du nu har lundgren.kent@gmail.com konfigurerad kommer:
+• Alla commits att kopplas till kentlundgren
+• När du pushar kommer projektet att skapas på kentlundgren
+• Projektet kommer synas på https://github.com/kentlundgren/
+
+
+VILL JAG BYTA TILL LUNDGREN9-KONTOT ISTÄLLET?
+----------------------------------------------
+
+Om detta projekt ska vara på lundgren9-kontot istället, kör:
+
+    # Kolla vilken e-post lundgren9 använder på GitHub först!
+    # Gå till: https://github.com/lundgren9 → Settings → Emails
+
+    # Ändra sedan din Git-config:
+    git config --global user.email "DIN-LUNDGREN9-EPOST@exempel.se"
+
+Notera: Du behöver använda exakt den e-post som är registrerad på 
+lundgren9-kontot på GitHub!
+
+
+REKOMMENDATION FÖR DETTA PROJEKT:
+----------------------------------
+
+✅ BEHÅLL KENTLUNDGREN-KONTOT
+
+Eftersom detta är ett arbetsrelaterat projekt för Simrishamns kommun
+(Bokslutstider) och inte direkt kopplat till Poolia, är kentlundgren 
+ett bra val.
+
+Lundgren9 verkar vara specifikt för Poolia-projekt.
+
+
+NÄR JAG PUSHAR TILL GITHUB:
+----------------------------
+
+Steg 1: Logga in på https://github.com (se till att du är inloggad på
+        kentlundgren, INTE lundgren9)
+
+Steg 2: Skapa nytt repo och döp det till: bokslutstider
+
+Steg 3: Kör dessa kommandon:
+        git remote add origin https://github.com/kentlundgren/bokslutstider.git
+        git push -u origin main
+
+Steg 4: Projektet finns nu på: 
+        https://github.com/kentlundgren/bokslutstider
+
+
+VANLIGA MISSTAG ATT UNDVIKA:
+-----------------------------
+
+❌ Inloggad på lundgren9 men Git-config pekar på lundgren.kent@gmail.com
+   → Commits kommer märkas som "kentlundgren" men repot skapas på lundgren9
+   → Förvirrande!
+
+❌ Git-config säger lundgren.kent@gmail.com men jag försöker pusha till
+   https://github.com/lundgren9/bokslutstider.git
+   → Fungerar, men commits visar fel författare
+
+✅ RÄTT: E-post i Git-config matchar GitHub-kontot du pushar till!
+
+
+SAMMANFATTNING:
+---------------
+
+🎯 Nuvarande konfiguration:
+   • Git user.email: lundgren.kent@gmail.com
+   • Detta matchar: https://github.com/kentlundgren/
+   • Projektet kommer hamna på: kentlundgren-kontot
+
+🔧 Om du vill ändra:
+   • Ändra user.email till den e-post som är registrerad på önskat konto
+   • Se till att du är inloggad på rätt GitHub-konto i webbläsaren
+   • Använd rätt URL när du gör "git remote add origin"
+
+📚 Mer information:
+   • Öppna GitHub.html i din webbläsare för detaljerad guide
+   • Läs NÄSTA_STEG_GITHUB.md för steg-för-steg instruktioner
+   • Se avsnittet "Hantera flera GitHub-konton" i GitHub.html
+
+
+═══════════════════════════════════════════════════════════════════════════
+Senast uppdaterad: 2026-02-02
+═══════════════════════════════════════════════════════════════════════════

@@ -9,16 +9,60 @@ Git-repot är nu skapat lokalt! Här är stegen för att få upp det på GitHub:
 - ✅ README.md skapad (projektdokumentation)
 - ✅ Första commit gjord: "Initial commit: Möteskalender 2026"
 - ✅ Länkar mellan `index.html` och `GitHub.html` skapade
+- ✅ Git-konfiguration: Kopplad till **kentlundgren**-kontot
+
+## 👥 Dina två GitHub-konton
+
+Du har två GitHub-konton och det är viktigt att veta vilket som används!
+
+| Konto | Användning | E-post | Status |
+|-------|-----------|---------|--------|
+| **[kentlundgren](https://github.com/kentlundgren/)** | Personliga projekt | lundgren.kent@gmail.com | ✅ **AKTIV NU** |
+| **[lundgren9](https://github.com/lundgren9)** | Poolia-projekt (jobb) | (Annan e-post) | Inaktiv |
+
+### 🔍 Kontrollera vilket konto som används:
+
+```powershell
+# Kolla ditt namn
+git config user.name
+
+# Kolla din e-post (detta avgör vilket GitHub-konto!)
+git config user.email
+```
+
+**Ditt nuvarande konto:**
+- Namn: `Kent Lundgren`
+- E-post: `lundgren.kent@gmail.com`
+- GitHub: **https://github.com/kentlundgren/**
+
+✅ Detta betyder att när du pushar detta projekt kommer det hamna på **kentlundgren**-kontot!
+
+### 🔄 Vill du byta konto?
+
+Om du vill pusha till **lundgren9**-kontot istället:
+
+```powershell
+# Ändra globalt (för alla projekt)
+git config --global user.name "Kent på Poolia"
+git config --global user.email "din-poolia-epost@exempel.se"
+
+# ELLER ändra bara för detta projekt (rekommenderat)
+cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"
+git config user.name "Kent Lundgren"
+git config user.email "lundgren.kent@gmail.com"
+```
+
+**⚠️ VIKTIGT:** E-postadressen måste matcha den som är registrerad på ditt GitHub-konto!
 
 ## 📝 Steg för att pusha till GitHub
 
-### 1️⃣ Skapa ett GitHub-konto (om du inte har ett)
+### 1️⃣ Logga in på rätt GitHub-konto
 
-Gå till [github.com](https://github.com) och registrera dig.
+Gå till [github.com](https://github.com) och logga in på **kentlundgren**-kontot (eftersom det är det din Git är konfigurerad för).
 
 ### 2️⃣ Skapa ett nytt repository på GitHub
 
-1. Logga in på GitHub
+1. Se till att du är inloggad på **kentlundgren**-kontot
 2. Klicka på den gröna knappen **"New"** (eller går till: https://github.com/new)
 3. Fyll i:
    - **Repository name**: `bokslutstider`
@@ -36,8 +80,8 @@ När repot är skapat visar GitHub instruktioner. Använd dessa kommandon i Powe
 # Gå till projektmappen (om du inte redan är där)
 cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"
 
-# Lägg till GitHub som "remote" (byt ut DIT-ANVÄNDARNAMN)
-git remote add origin https://github.com/DIT-ANVÄNDARNAMN/bokslutstider.git
+# Lägg till GitHub som "remote" (använd kentlundgren-kontot)
+git remote add origin https://github.com/kentlundgren/bokslutstider.git
 
 # Kontrollera att remote är tillagd
 git remote -v
@@ -46,7 +90,10 @@ git remote -v
 git push -u origin main
 ```
 
-**VIKTIGT**: Byt ut `DIT-ANVÄNDARNAMN` mot ditt riktiga GitHub-användarnamn!
+**📌 OBS:** URL:en ovan använder **kentlundgren** eftersom det är kontot du är kopplad till. Om du vill använda **lundgren9** istället, byt till:
+```
+https://github.com/lundgren9/bokslutstider.git
+```
 
 ### 4️⃣ Autentisering
 
@@ -152,7 +199,40 @@ git pull
 **Lösning**:
 ```powershell
 git config --global user.name "Kent Lundgren"
-git config --global user.email "din.epost@exempel.se"
+git config --global user.email "lundgren.kent@gmail.com"
+```
+
+### Problem: "Fel GitHub-konto används"
+**Symptom**: Commits dyker upp på fel GitHub-konto eller du får access denied.
+
+**Lösning**: Kontrollera och ändra din e-post:
+```powershell
+# Kolla nuvarande konfiguration
+git config user.email
+
+# Om den är fel, ändra den
+git config --global user.email "lundgren.kent@gmail.com"  # För kentlundgren
+# eller
+git config --global user.email "din-poolia-epost@exempel.se"  # För lundgren9
+```
+
+### Problem: "Repository redan finns"
+**Symptom**: GitHub säger att repot redan existerar på ditt konto.
+
+**Lösning**: 
+1. Välj ett annat namn, t.ex. `bokslutstider-2026`
+2. Eller ta bort det gamla repot på GitHub först (om det är tomt)
+
+### Problem: Commits visar fel författare på GitHub
+**Orsak**: E-postadressen i din Git-config matchar inte den på GitHub.
+
+**Lösning**: Se till att e-posten matchar:
+```powershell
+# Kontrollera vilken e-post som är registrerad på GitHub
+# Gå till: GitHub → Settings → Emails
+
+# Ändra Git-config till samma e-post
+git config --global user.email "DEN-EPOST-SOM-FINNS-PÅ-GITHUB"
 ```
 
 ## 📚 Mer hjälp

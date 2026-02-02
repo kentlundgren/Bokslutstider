@@ -270,7 +270,167 @@
             </div>
         </section>
         
-        <!-- SEKTION 3: Steg-för-steg guide -->
+        <!-- SEKTION 2.5: Flera GitHub-konton -->
+        <section class="section">
+            <h2>👥 Hantera flera GitHub-konton</h2>
+            
+            <div class="warning-box">
+                <strong>⚠️ Har du flera GitHub-konton?</strong><br>
+                Om du har flera GitHub-konton (t.ex. privat och jobb), är det viktigt att veta vilket du är kopplad mot!
+            </div>
+            
+            <h3>Kontrollera vilket konto du använder:</h3>
+            
+            <div class="command">
+                # Kolla ditt namn<br>
+                <code>git config --global user.name</code><br><br>
+                
+                # Kolla din e-post (detta avgör vilket GitHub-konto som används!)<br>
+                <code>git config --global user.email</code>
+            </div>
+            
+            <div class="concept-box">
+                <strong>DIN NUVARANDE KONFIGURATION:</strong><br>
+                • Namn: <code>Kent Lundgren</code><br>
+                • E-post: <code>lundgren.kent@gmail.com</code><br>
+                • GitHub-konto: <a href="https://github.com/kentlundgren/" target="_blank">https://github.com/kentlundgren/</a>
+            </div>
+            
+            <h3>Dina två GitHub-konton:</h3>
+            
+            <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+                <thead>
+                    <tr style="background: #667eea; color: white;">
+                        <th style="padding: 0.75rem; text-align: left;">Konto</th>
+                        <th style="padding: 0.75rem; text-align: left;">Användning</th>
+                        <th style="padding: 0.75rem; text-align: left;">E-post</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background: #f8f9ff;">
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            <a href="https://github.com/kentlundgren/" target="_blank">kentlundgren</a>
+                        </td>
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            <strong>AKTIV NU</strong> ✅<br>Personliga projekt
+                        </td>
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            lundgren.kent@gmail.com
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            <a href="https://github.com/lundgren9" target="_blank">lundgren9</a>
+                        </td>
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            Poolia-projekt (jobbrelaterat)
+                        </td>
+                        <td style="padding: 0.75rem; border: 1px solid #ddd;">
+                            (Annan e-post)
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <h3>Byta mellan konton:</h3>
+            
+            <p><strong>För att byta till lundgren9-kontot (globalt för alla projekt):</strong></p>
+            <div class="command">
+                <code>git config --global user.name "Kent på Poolia"</code><br>
+                <code>git config --global user.email "din-poolia-epost@exempel.se"</code>
+            </div>
+            
+            <p><strong>För att sätta specifikt konto BARA för detta projekt:</strong></p>
+            <div class="command">
+                # Gå till projektmappen först<br>
+                <code>cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"</code><br><br>
+                
+                # Sätt lokalt för detta projekt (utan --global)<br>
+                <code>git config user.name "Kent Lundgren"</code><br>
+                <code>git config user.email "lundgren.kent@gmail.com"</code>
+            </div>
+            
+            <div class="success-box">
+                💡 <strong>Tips:</strong> Använd <code>--global</code> för standardkonfiguration på hela datorn. 
+                Använd UTAN <code>--global</code> för att sätta specifikt för ett enda projekt.
+            </div>
+        </section>
+        
+        <!-- SEKTION 3: Cursor's Git-integration -->
+        <section class="section">
+            <h2>💻 Git i Cursor (VS Code)</h2>
+            
+            <div class="concept-box">
+                <strong>När du startar ett nytt projekt i Cursor</strong> ser du ibland denna dialog:
+            </div>
+            
+            <img src="Git_och_GitHub_i_Cursor.jpg" alt="Cursor Git-integration" style="width: 100%; max-width: 600px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin: 1rem 0;">
+            
+            <h3>📋 Förklaring av knapparna:</h3>
+            
+            <div class="concept-box">
+                <strong>🔵 "Initialize Repository"</strong><br>
+                • Kör <code>git init</code> i din projektmapp<br>
+                • Skapar ett lokalt Git-repo<br>
+                • Filerna finns BARA på din dator (inte på GitHub än)<br>
+                • <strong>Detta har vi redan gjort manuellt via PowerShell!</strong>
+            </div>
+            
+            <div class="concept-box">
+                <strong>🌐 "Publish to GitHub"</strong><br>
+                • Gör ALLT på en gång: <code>git init</code> + skapa GitHub-repo + pusha<br>
+                • Skapar automatiskt ett nytt repo på GitHub<br>
+                • Pushar alla filer direkt<br>
+                • <strong>Enklast för nybörjare!</strong> ⭐
+            </div>
+            
+            <h3>🤔 Vad ska du göra när du ser denna dialog?</h3>
+            
+            <div class="warning-box">
+                <strong>Alternativ 1: "Publish to GitHub" (Rekommenderat för nybörjare)</strong><br><br>
+                
+                ✅ <strong>Fördelar:</strong><br>
+                • Snabbt och enkelt<br>
+                • Cursor sköter allt automatiskt<br>
+                • Perfekt för nya projekt<br><br>
+                
+                📝 <strong>Steg:</strong><br>
+                1. Klicka på "Publish to GitHub"<br>
+                2. Logga in med ditt GitHub-konto (kentlundgren eller lundgren9)<br>
+                3. Välj om repot ska vara Public eller Private<br>
+                4. Cursor skapar repot och pushar alla filer<br>
+                5. Klart! 🎉
+            </div>
+            
+            <div class="concept-box">
+                <strong>Alternativ 2: "Initialize Repository" (Mer kontroll)</strong><br><br>
+                
+                ✅ <strong>Fördelar:</strong><br>
+                • Du har full kontroll över varje steg<br>
+                • Bra för att lära sig Git<br>
+                • Kan välja exakt vad som ska committas<br><br>
+                
+                📝 <strong>Steg:</strong><br>
+                1. Klicka på "Initialize Repository"<br>
+                2. Skapa <code>.gitignore</code> (vi har redan gjort detta)<br>
+                3. Gör första commit manuellt (vi har redan gjort detta)<br>
+                4. Skapa GitHub-repo manuellt på github.com<br>
+                5. Koppla samman med <code>git remote add origin</code><br>
+                6. Pusha med <code>git push -u origin main</code>
+            </div>
+            
+            <h3>✅ För detta projekt:</h3>
+            
+            <div class="success-box">
+                Vi har redan använt <strong>Alternativ 2</strong>! Vi har:<br>
+                ✅ Kört <code>git init</code> manuellt<br>
+                ✅ Skapat <code>.gitignore</code><br>
+                ✅ Gjort första commit<br>
+                ⏳ <strong>Nästa steg:</strong> Pusha till GitHub (se nedan)
+            </div>
+        </section>
+        
+        <!-- SEKTION 4: Steg-för-steg guide -->
         <section class="section">
             <h2>🛠️ Steg-för-steg: Sätta upp ditt projekt</h2>
             
@@ -373,7 +533,7 @@
             </ol>
         </section>
         
-        <!-- SEKTION 4: Dagligt arbetsflöde -->
+        <!-- SEKTION 5: Dagligt arbetsflöde -->
         <section class="section">
             <h2>📅 Dagligt arbetsflöde</h2>
             
@@ -403,7 +563,7 @@
             </ul>
         </section>
         
-        <!-- SEKTION 5: Viktiga tips -->
+        <!-- SEKTION 6: Viktiga tips -->
         <section class="section">
             <h2>💡 Viktiga tips för att Git och GitHub ska fungera bra</h2>
             
@@ -441,9 +601,14 @@
             </div>
         </section>
         
-        <!-- SEKTION 6: Användbara kommandon -->
+        <!-- SEKTION 7: Användbara kommandon -->
         <section class="section">
             <h2>🔧 Användbara Git-kommandon</h2>
+            
+            <div class="command">
+                # <strong>VIKTIGT: Kontrollera vilket konto du är kopplad mot</strong><br>
+                <code>git config user.name</code><br>
+                <code>git config user.email</code><br><br>
             
             <div class="command">
                 # Se historik av commits<br>
@@ -466,7 +631,7 @@
             </div>
         </section>
         
-        <!-- SEKTION 7: Felsökning -->
+        <!-- SEKTION 8: Felsökning -->
         <section class="section">
             <h2>🆘 Vanliga problem och lösningar</h2>
             
@@ -491,7 +656,22 @@
             </div>
         </section>
         
-        <!-- SEKTION 8: Resurser -->
+            <h3>Problem: Fel GitHub-konto används</h3>
+            <div class="concept-box">
+                <strong>Lösning:</strong> Kontrollera och ändra ditt Git-konfigurerade användarnamn och e-post:<br>
+                <div class="command">
+                    # Kontrollera nuvarande konfiguration<br>
+                    <code>git config --global user.name</code><br>
+                    <code>git config --global user.email</code><br><br>
+                    
+                    # Ändra till rätt konto (exempel för kentlundgren-kontot)<br>
+                    <code>git config --global user.name "Kent Lundgren"</code><br>
+                    <code>git config --global user.email "lundgren.kent@gmail.com"</code>
+                </div>
+                <strong>Observera:</strong> E-postadressen måste matcha den som är registrerad på ditt GitHub-konto!
+            </div>
+        
+        <!-- SEKTION 9: Resurser -->
         <section class="section">
             <h2>📖 Läs mer</h2>
             
