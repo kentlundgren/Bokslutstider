@@ -1,0 +1,1677 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Möteskalender 2026 – Kultur- och Fritidsförvaltningen</title>
+    
+    <!-- 
+    ============================================================================
+    MÖTESKALENDER 2026 - KULTUR- OCH FRITIDSFÖRVALTNINGEN, SIMRISHAMNS KOMMUN
+    ============================================================================
+    Skapad för: Kent, Ekonom/Controller
+    Syfte: Planera månatliga uppföljningsmöten med enhetschefer
+    
+    Mötesstruktur:
+    - Dag 1: Fritid (09:00-10:30) + Allmän kultur (13:00-14:30)
+    - Dag 2: Museet (09:00-10:30) + Biblioteket (13:00-14:30)
+    - Dag 3: Gunilla/Förvaltningschef (09:00-09:30)
+    
+    Standardregel: Möten hålls 10:e, 11:e och 12:e varje månad
+    Undantag: Vid helgkrock flyttas möten enligt fördefinierat schema
+    
+    Period: Februari - December 2026
+    ============================================================================
+    -->
+    
+    <!-- Google Fonts - Elegant skandinavisk typografi -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+        ========================================
+        CSS VARIABLER - FÄRGPALETT
+        ========================================
+        Inspirerad av sydöstra Skånes landskap:
+        - Havsblått, sandfärger, och naturliga toner
+        - Varje enhetschef har en unik accentfärg
+        */
+        :root {
+            /* Basfärger */
+            --bg-primary: #f8f6f3;           /* Varm off-white, som sand */
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;          /* Djupt blågrått */
+            --text-secondary: #5d6d7e;
+            --text-muted: #95a5a6;
+            
+            /* Accentfärger för enhetschefer */
+            --color-fritid: #3498db;          /* Havsblått - Emmy & Viktor */
+            --color-kultur: #9b59b6;          /* Lavendel - Elisabeth */
+            --color-museet: #e67e22;          /* Bärnsten - Egil */
+            --color-bibliotek: #27ae60;       /* Skogsgrön - Katrin */
+            --color-chef: #c0392b;            /* Tegelröd - Gunilla */
+            
+            /* Helgdag/varning */
+            --color-weekend: #e74c3c;
+            --color-weekend-bg: #fdf2f2;
+            
+            /* Anpassade datum */
+            --color-adjusted: #f39c12;
+            --color-adjusted-bg: #fef9e7;
+            
+            /* UI-färger */
+            --border-light: #e8e4df;
+            --shadow-soft: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-medium: 0 4px 20px rgba(0,0,0,0.1);
+            --shadow-hover: 0 8px 30px rgba(0,0,0,0.15);
+            
+            /* Typografi */
+            --font-display: 'Playfair Display', Georgia, serif;
+            --font-body: 'DM Sans', -apple-system, sans-serif;
+            
+            /* Animationer */
+            --transition-fast: 0.2s ease;
+            --transition-medium: 0.3s ease;
+        }
+        
+        /* 
+        ========================================
+        GRUNDLÄGGANDE STILAR
+        ========================================
+        */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        /* 
+        ========================================
+        HEADER - RUBRIK OCH INTRODUKTION
+        ========================================
+        */
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Dekorativ våg-effekt i headern */
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: var(--bg-primary);
+            border-radius: 100% 100% 0 0;
+        }
+        
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .header .year-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.15);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 
+        ========================================
+        CONTAINER OCH LAYOUT
+        ========================================
+        */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        /* 
+        ========================================
+        INFORUTOR - MÖTESÖVERSIKT
+        ========================================
+        Visar vilka möten som planeras och med vem
+        */
+        .info-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .info-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            border-left: 4px solid var(--border-light);
+            transition: all var(--transition-medium);
+        }
+        
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+        
+        /* Färgkodning för varje enhetschefs kort */
+        .info-card.fritid { border-left-color: var(--color-fritid); }
+        .info-card.kultur { border-left-color: var(--color-kultur); }
+        .info-card.museet { border-left-color: var(--color-museet); }
+        .info-card.bibliotek { border-left-color: var(--color-bibliotek); }
+        .info-card.chef { border-left-color: var(--color-chef); }
+        
+        .info-card .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Färgad cirkel som indikator */
+        .info-card .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .info-card.fritid .color-dot { background: var(--color-fritid); }
+        .info-card.kultur .color-dot { background: var(--color-kultur); }
+        .info-card.museet .color-dot { background: var(--color-museet); }
+        .info-card.bibliotek .color-dot { background: var(--color-bibliotek); }
+        .info-card.chef .color-dot { background: var(--color-chef); }
+        
+        .info-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .info-card .details {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        
+        .info-card .time {
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-top: 0.5rem;
+        }
+        
+        .info-card .ansvar {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        
+        /* 
+        ========================================
+        LOGIK-RUTA
+        ========================================
+        */
+        .logic-section {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logic-section h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .logic-section .rule {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+        }
+        
+        .logic-section .rule-icon {
+            background: rgba(255,255,255,0.2);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.85rem;
+        }
+        
+        .logic-section .rule-text {
+            line-height: 1.5;
+        }
+        
+        .logic-section .rule-text strong {
+            color: #f1c40f;
+        }
+        
+        /* 
+        ========================================
+        KALENDER-SEKTION
+        ========================================
+        */
+        .calendar-section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        /* Skriv ut-knapp */
+        .print-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--text-primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+        
+        .print-btn:hover {
+            background: #1a252f;
+            transform: translateY(-1px);
+        }
+        
+        /* 
+        ========================================
+        LEGEND / FÖRKLARINGSRUTA
+        ========================================
+        */
+        .legend {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 2rem;
+        }
+        
+        .legend h3 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .legend-item .sample {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .legend-item .sample.standard {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+        }
+        
+        .legend-item .sample.adjusted {
+            background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);
+            color: white;
+        }
+        
+        .legend-item .sample.weekend {
+            background: var(--color-weekend-bg);
+            color: var(--color-weekend);
+            text-decoration: line-through;
+        }
+        
+        /* 
+        ========================================
+        KALENDER-GRID - 11 MÅNADER
+        ========================================
+        Visar alla månader i ett responsivt grid
+        */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* 
+        ========================================
+        MÅNADSKORT
+        ========================================
+        Varje månad visas som ett eget kort
+        */
+        .month-card {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: all var(--transition-medium);
+        }
+        
+        .month-card:hover {
+            box-shadow: var(--shadow-medium);
+        }
+        
+        .month-card.has-adjustment {
+            box-shadow: 0 0 0 2px var(--color-adjusted), var(--shadow-soft);
+        }
+        
+        .month-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 1rem 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .month-header.adjusted {
+            background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+        }
+        
+        .month-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .month-header .review-period {
+            font-size: 0.8rem;
+            opacity: 0.85;
+        }
+        
+        .month-header .adjustment-badge {
+            background: rgba(255,255,255,0.25);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+        
+        .month-body {
+            padding: 1.25rem;
+        }
+        
+        /* 
+        ========================================
+        VECKODAG-HEADERS
+        ========================================
+        */
+        .weekday-row {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .weekday-row span {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* 
+        ========================================
+        DATUMCELLER I KALENDERN
+        ========================================
+        */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+        }
+        
+        .day-cell {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            position: relative;
+            transition: all var(--transition-fast);
+        }
+        
+        /* Tom cell (utanför månaden) */
+        .day-cell.empty {
+            background: transparent;
+        }
+        
+        /* Vanlig dag */
+        .day-cell.normal {
+            color: var(--text-secondary);
+        }
+        
+        /* Helgdag (lördag/söndag) */
+        .day-cell.weekend {
+            color: var(--color-weekend);
+            font-weight: 500;
+        }
+        
+        /* Dag med bokade möten - STANDARD (grönt) */
+        .day-cell.has-meetings {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .day-cell.has-meetings:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.4);
+            z-index: 10;
+        }
+        
+        /* Dag med bokade möten - ANPASSAD (orange) */
+        .day-cell.has-meetings.adjusted {
+            background: linear-gradient(135deg, #f39c12 0%, #f1c40f 100%);
+            color: white;
+        }
+        
+        .day-cell.has-meetings.adjusted:hover {
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.4);
+        }
+        
+        /* 
+        ========================================
+        TOOLTIP / HOVER-INFORMATION
+        ========================================
+        */
+        .day-cell .tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--transition-fast);
+            z-index: 100;
+            box-shadow: var(--shadow-medium);
+            max-width: 280px;
+            white-space: normal;
+            text-align: left;
+            line-height: 1.4;
+        }
+        
+        .day-cell .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--text-primary);
+        }
+        
+        .day-cell:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .tooltip .tooltip-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #f1c40f;
+        }
+        
+        .tooltip .tooltip-rule {
+            font-size: 0.75rem;
+            opacity: 0.9;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+        }
+        
+        /* 
+        ========================================
+        MÖTESSCHEMA PER MÅNAD
+        ========================================
+        Lista under varje månadskalender
+        */
+        .month-meetings {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+        
+        .month-meetings .adjustment-note {
+            background: var(--color-adjusted-bg);
+            border-left: 3px solid var(--color-adjusted);
+            padding: 0.75rem;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+        
+        .month-meetings .adjustment-note strong {
+            color: var(--color-adjusted);
+        }
+        
+        .meeting-day {
+            margin-bottom: 0.75rem;
+        }
+        
+        .meeting-day:last-child {
+            margin-bottom: 0;
+        }
+        
+        .meeting-day-header {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .meeting-day-header .day-badge {
+            background: var(--text-primary);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+        
+        .meeting-day-header .day-badge.adjusted {
+            background: var(--color-adjusted);
+        }
+        
+        .meeting-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding: 0.25rem 0;
+            padding-left: 0.5rem;
+        }
+        
+        .meeting-item .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        /* Färger för mötesprickar */
+        .meeting-item .dot.fritid { background: var(--color-fritid); }
+        .meeting-item .dot.kultur { background: var(--color-kultur); }
+        .meeting-item .dot.museet { background: var(--color-museet); }
+        .meeting-item .dot.bibliotek { background: var(--color-bibliotek); }
+        .meeting-item .dot.chef { background: var(--color-chef); }
+        
+        /* 
+        ========================================
+        SAMMANFATTNING / STATISTIK
+        ========================================
+        */
+        .summary-section {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: var(--shadow-soft);
+            margin-top: 2rem;
+        }
+        
+        .summary-section h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .summary-stat {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 12px;
+        }
+        
+        .summary-stat .number {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .summary-stat .number.orange {
+            color: var(--color-adjusted);
+        }
+        
+        .summary-stat .label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        /* 
+        ========================================
+        FOOTER
+        ========================================
+        */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        
+        /* 
+        ========================================
+        MODAL / POPUP FÖR DETALJER
+        ========================================
+        */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+            animation: fadeIn 0.2s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-hover);
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+        
+        .modal-header .modal-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0.5rem;
+            transition: color var(--transition-fast);
+        }
+        
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+        
+        .modal-rule-box {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--color-adjusted);
+        }
+        
+        .modal-rule-box.standard {
+            border-left-color: #27ae60;
+        }
+        
+        .modal-rule-box h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+        
+        .modal-rule-box p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .modal-content .meeting-detail {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+        }
+        
+        .modal-content .meeting-detail .time-col {
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 100px;
+        }
+        
+        .modal-content .meeting-detail .info-col h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .modal-content .meeting-detail .info-col p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        /* 
+        ========================================
+        UTSKRIFTSSTILAR
+        ========================================
+        Anpassningar för när sidan skrivs ut
+        */
+        @media print {
+            body {
+                background: white;
+                font-size: 11pt;
+            }
+            
+            .header {
+                background: #2c3e50 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .print-btn {
+                display: none;
+            }
+            
+            .month-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ddd;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .info-section {
+                grid-template-columns: repeat(5, 1fr);
+            }
+            
+            .modal-overlay {
+                display: none !important;
+            }
+            
+            .day-cell .tooltip {
+                display: none !important;
+            }
+        }
+        
+        /* 
+        ========================================
+        RESPONSIVA ANPASSNINGAR
+        ========================================
+        */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .calendar-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .legend-items {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            
+            .day-cell .tooltip {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+    ============================================
+    HEADER-SEKTION
+    ============================================
+    -->
+    <header class="header">
+        <h1>Möteskalender</h1>
+        <p class="subtitle">Kultur- och Fritidsförvaltningen, Simrishamns kommun</p>
+        <span class="year-badge">📅 Februari – December 2026</span>
+    </header>
+    
+    <div class="container">
+        <!-- 
+        ============================================
+        INFORMATIONSKORT - ALLA ENHETER
+        ============================================
+        Visar varje enhetschef med färgkodning
+        -->
+        <section class="info-section">
+            <!-- Fritid -->
+            <div class="info-card fritid">
+                <div class="card-header">
+                    <span class="color-dot"></span>
+                    <h3>Fritid</h3>
+                </div>
+                <p class="details">Emmy & Viktor</p>
+                <p class="time">🕘 09:00 – 10:30 (Dag 1)</p>
+                <p class="ansvar">Ansvar: 41000</p>
+            </div>
+            
+            <!-- Allmän kultur -->
+            <div class="info-card kultur">
+                <div class="card-header">
+                    <span class="color-dot"></span>
+                    <h3>Allmän kultur</h3>
+                </div>
+                <p class="details">Elisabeth</p>
+                <p class="time">🕐 13:00 – 14:30 (Dag 1)</p>
+                <p class="ansvar">Ansvar: 42000</p>
+            </div>
+            
+            <!-- Museet -->
+            <div class="info-card museet">
+                <div class="card-header">
+                    <span class="color-dot"></span>
+                    <h3>Museet</h3>
+                </div>
+                <p class="details">Egil</p>
+                <p class="time">🕘 09:00 – 10:30 (Dag 2)</p>
+                <p class="ansvar">Ansvar: 46000</p>
+            </div>
+            
+            <!-- Biblioteket -->
+            <div class="info-card bibliotek">
+                <div class="card-header">
+                    <span class="color-dot"></span>
+                    <h3>Biblioteket</h3>
+                </div>
+                <p class="details">Katrin</p>
+                <p class="time">🕐 13:00 – 14:30 (Dag 2)</p>
+                <p class="ansvar">Ansvar: 47000</p>
+            </div>
+            
+            <!-- Förvaltningschef -->
+            <div class="info-card chef">
+                <div class="card-header">
+                    <span class="color-dot"></span>
+                    <h3>Förvaltningschef</h3>
+                </div>
+                <p class="details">Gunilla</p>
+                <p class="time">🕘 09:00 – 09:30 (Dag 3)</p>
+                <p class="ansvar">Ansvar: 40000</p>
+            </div>
+        </section>
+        
+        <!-- 
+        ============================================
+        LOGIK-RUTA - FÖRKLARING AV REGLERNA
+        ============================================
+        -->
+        <section class="logic-section">
+            <h3>📋 Bokningslogik</h3>
+            <div class="rule">
+                <span class="rule-icon">1</span>
+                <span class="rule-text">
+                    <strong>Standardregel:</strong> Möten hålls den 10:e, 11:e och 12:e varje månad.
+                </span>
+            </div>
+            <div class="rule">
+                <span class="rule-icon">2</span>
+                <span class="rule-text">
+                    <strong>Vid helgkrock:</strong> Om något av dessa datum är helg, flyttas alla tre mötesdagar – oftast tidigare i veckan, ibland senare.
+                </span>
+            </div>
+            <div class="rule">
+                <span class="rule-icon">3</span>
+                <span class="rule-text">
+                    <strong>Färgkodning:</strong> 
+                    <span style="color: #2ecc71;">●</span> Grönt = standarddatum |
+                    <span style="color: #f1c40f;">●</span> Orange = anpassat datum
+                </span>
+            </div>
+        </section>
+        
+        <!-- 
+        ============================================
+        LEGEND / FÖRKLARINGSRUTA
+        ============================================
+        -->
+        <div class="legend">
+            <h3>Förklaring</h3>
+            <div class="legend-items">
+                <div class="legend-item">
+                    <span class="sample standard">10</span>
+                    <span>Standarddatum (10–12:e)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="sample adjusted">8</span>
+                    <span>Anpassat datum (helgkrock)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="sample weekend">11</span>
+                    <span>Helg (ej tillgänglig)</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 
+        ============================================
+        KALENDER-SEKTION
+        ============================================
+        -->
+        <section class="calendar-section">
+            <div class="section-header">
+                <h2>Årsöversikt 2026</h2>
+                <button class="print-btn" onclick="window.print()">
+                    🖨️ Skriv ut
+                </button>
+            </div>
+            
+            <!-- Här genereras kalendern med JavaScript -->
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Månader fylls i av JavaScript -->
+            </div>
+        </section>
+        
+        <!-- 
+        ============================================
+        SAMMANFATTNING
+        ============================================
+        -->
+        <section class="summary-section">
+            <h2>Sammanfattning feb–dec 2026</h2>
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <div class="number">55</div>
+                    <div class="label">Möten totalt</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="number">33</div>
+                    <div class="label">Mötesdagar</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="number">71,5</div>
+                    <div class="label">Mötestimmar</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="number orange">6</div>
+                    <div class="label">Månader med anpassning</div>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <!-- 
+    ============================================
+    MODAL FÖR DETALJVY
+    ============================================
+    -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modalTitle">Mötesdetaljer</h3>
+                    <p class="modal-subtitle" id="modalSubtitle">Uppföljning</p>
+                </div>
+                <button class="modal-close" onclick="closeModal()">✕</button>
+            </div>
+            <div id="modalRuleBox"></div>
+            <div class="modal-content" id="modalContent">
+                <!-- Fylls i av JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>Möteskalender för resultatuppföljning • Kultur- och Fritidsförvaltningen</p>
+        <p>Simrishamns kommun • 2026</p>
+        <p style="margin-top: 1rem;">
+            <a href="GitHub.html" style="color: #667eea; text-decoration: none; font-weight: 500; transition: color 0.2s;">
+                🚀 Git och GitHub Guide
+            </a>
+        </p>
+    </footer>
+    
+    <!-- 
+    ============================================================================
+    JAVASCRIPT - KALENDERLOGIK
+    ============================================================================
+    -->
+    <script>
+        /**
+         * ========================================
+         * KONFIGURATION OCH DATA
+         * ========================================
+         */
+        
+        // Svenska månadsnamn för visning
+        const MANAD_NAMN = [
+            'Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni',
+            'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'
+        ];
+        
+        // Svenska veckodagar (börjar med måndag enligt svensk standard)
+        const VECKODAGAR = ['Mån', 'Tis', 'Ons', 'Tor', 'Fre', 'Lör', 'Sön'];
+        
+        // Fullständiga veckodagsnamn
+        const VECKODAGAR_FULL = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
+        
+        /**
+         * Mötesstruktur: Vilka möten som hålls vilken dag
+         * Dag 1: Fritid + Allmän kultur
+         * Dag 2: Museet + Biblioteket
+         * Dag 3: Gunilla (förvaltningschef)
+         */
+        const MOTES_SCHEMA = {
+            dag1: [
+                { 
+                    namn: 'Fritid', 
+                    ansvarig: 'Emmy & Viktor', 
+                    tid: '09:00 – 10:30',
+                    ansvarNr: '41000',
+                    klass: 'fritid'
+                },
+                { 
+                    namn: 'Allmän kultur', 
+                    ansvarig: 'Elisabeth', 
+                    tid: '13:00 – 14:30',
+                    ansvarNr: '42000',
+                    klass: 'kultur'
+                }
+            ],
+            dag2: [
+                { 
+                    namn: 'Museet', 
+                    ansvarig: 'Egil', 
+                    tid: '09:00 – 10:30',
+                    ansvarNr: '46000',
+                    klass: 'museet'
+                },
+                { 
+                    namn: 'Biblioteket', 
+                    ansvarig: 'Katrin', 
+                    tid: '13:00 – 14:30',
+                    ansvarNr: '47000',
+                    klass: 'bibliotek'
+                }
+            ],
+            dag3: [
+                { 
+                    namn: 'Förvaltningschef', 
+                    ansvarig: 'Gunilla', 
+                    tid: '09:00 – 09:30',
+                    ansvarNr: '40000',
+                    klass: 'chef'
+                }
+            ]
+        };
+        
+        /**
+         * ========================================
+         * MÖTESDATUM FÖR VARJE MÅNAD
+         * ========================================
+         * Fördefinierade datum baserat på helgkrockar.
+         * 
+         * Standardregel: 10:e, 11:e, 12:e
+         * Anpassningar görs när helger krockar.
+         * 
+         * Månad 0 = Januari (ej med)
+         * Månad 1 = Februari, osv.
+         */
+        const MOTESDATUM = {
+            // FEBRUARI - Standard (10:e tis, 11:e ons, 12:e tor)
+            1: {
+                dagar: [10, 11, 12],
+                standard: true,
+                forklaring: 'Standardregel används – inga helgkrockar.',
+                detalj: '10:e, 11:e och 12:e februari är alla vardagar (tisdag–torsdag).'
+            },
+            
+            // MARS - Standard (10:e tis, 11:e ons, 12:e tor)
+            2: {
+                dagar: [10, 11, 12],
+                standard: true,
+                forklaring: 'Standardregel används – inga helgkrockar.',
+                detalj: '10:e, 11:e och 12:e mars är alla vardagar (tisdag–torsdag).'
+            },
+            
+            // APRIL - Anpassat (11:e lör, 12:e sön → flytta tidigare)
+            3: {
+                dagar: [8, 9, 10],
+                standard: false,
+                forklaring: 'Helg 11–12 april – mötena flyttas tidigare.',
+                detalj: '11:e april är lördag och 12:e är söndag. Mötena flyttas till onsdag 8:e, torsdag 9:e och fredag 10:e.'
+            },
+            
+            // MAJ - Anpassat (10:e sön → dela upp)
+            4: {
+                dagar: [8, 11, 12],
+                standard: false,
+                forklaring: 'Söndag 10 maj – mötena delas upp.',
+                detalj: '10:e maj är söndag. Dag 1 flyttas till fredag 8:e. Dag 2 och 3 hålls måndag 11:e och tisdag 12:e.'
+            },
+            
+            // JUNI - Standard (10:e ons, 11:e tor, 12:e fre)
+            5: {
+                dagar: [10, 11, 12],
+                standard: true,
+                forklaring: 'Standardregel används – inga helgkrockar.',
+                detalj: '10:e, 11:e och 12:e juni är alla vardagar (onsdag–fredag).'
+            },
+            
+            // JULI - Anpassat (11:e lör, 12:e sön → flytta senare)
+            6: {
+                dagar: [13, 14, 15],
+                standard: false,
+                forklaring: 'Helg 11–12 juli – mötena flyttas senare.',
+                detalj: '11:e juli är lördag och 12:e är söndag. Mötena flyttas till måndag 13:e, tisdag 14:e och onsdag 15:e.'
+            },
+            
+            // AUGUSTI - Standard (10:e mån, 11:e tis, 12:e ons)
+            7: {
+                dagar: [10, 11, 12],
+                standard: true,
+                forklaring: 'Standardregel används – inga helgkrockar.',
+                detalj: '10:e, 11:e och 12:e augusti är alla vardagar (måndag–onsdag).'
+            },
+            
+            // SEPTEMBER - Anpassat (12:e lör → flytta tidigare)
+            8: {
+                dagar: [9, 10, 11],
+                standard: false,
+                forklaring: 'Lördag 12 september – mötena flyttas tidigare.',
+                detalj: '12:e september är lördag. Mötena flyttas till onsdag 9:e, torsdag 10:e och fredag 11:e.'
+            },
+            
+            // OKTOBER - Anpassat (10:e lör, 11:e sön → dela upp)
+            9: {
+                dagar: [9, 12, 13],
+                standard: false,
+                forklaring: 'Helg 10–11 oktober – mötena delas upp.',
+                detalj: '10:e oktober är lördag och 11:e är söndag. Dag 1 flyttas till fredag 9:e. Dag 2 och 3 hålls måndag 12:e och tisdag 13:e.'
+            },
+            
+            // NOVEMBER - Standard (10:e tis, 11:e ons, 12:e tor)
+            10: {
+                dagar: [10, 11, 12],
+                standard: true,
+                forklaring: 'Standardregel används – inga helgkrockar.',
+                detalj: '10:e, 11:e och 12:e november är alla vardagar (tisdag–torsdag).'
+            },
+            
+            // DECEMBER - Anpassat (12:e lör → flytta tidigare)
+            11: {
+                dagar: [9, 10, 11],
+                standard: false,
+                forklaring: 'Lördag 12 december – mötena flyttas tidigare.',
+                detalj: '12:e december är lördag. Mötena flyttas till onsdag 9:e, torsdag 10:e och fredag 11:e.'
+            }
+        };
+        
+        /**
+         * ========================================
+         * HJÄLPFUNKTIONER
+         * ========================================
+         */
+        
+        /**
+         * Hämtar veckodagsnamn på svenska
+         * @param {Date} datum - Datumet
+         * @returns {string} - Veckodagsnamn
+         */
+        function hamtaVeckodag(datum) {
+            return VECKODAGAR_FULL[datum.getDay()];
+        }
+        
+        /**
+         * Hämtar kort veckodagsnamn
+         * @param {Date} datum - Datumet
+         * @returns {string} - Kort veckodagsnamn (t.ex. "tis")
+         */
+        function hamtaKortVeckodag(datum) {
+            const dagar = ['sön', 'mån', 'tis', 'ons', 'tor', 'fre', 'lör'];
+            return dagar[datum.getDay()];
+        }
+        
+        /**
+         * Kontrollerar om ett datum är helg (lördag/söndag)
+         * @param {Date} datum - Datumet att kontrollera
+         * @returns {boolean} - True om det är helg
+         */
+        function arHelg(datum) {
+            const veckodag = datum.getDay();
+            return veckodag === 0 || veckodag === 6;
+        }
+        
+        /**
+         * Hittar antal dagar i en månad
+         * @param {number} ar - Året
+         * @param {number} manad - Månaden (0-11)
+         * @returns {number} - Antal dagar
+         */
+        function antalDagarIManad(ar, manad) {
+            return new Date(ar, manad + 1, 0).getDate();
+        }
+        
+        /**
+         * Hittar vilken veckodag den 1:a i månaden är
+         * @param {number} ar - Året
+         * @param {number} manad - Månaden (0-11)
+         * @returns {number} - Veckodagsindex (0 = måndag i vårt system)
+         */
+        function forstaDagenIManad(ar, manad) {
+            const dag = new Date(ar, manad, 1).getDay();
+            // Konvertera från JavaScript (0=söndag) till vårt format (0=måndag)
+            return dag === 0 ? 6 : dag - 1;
+        }
+        
+        /**
+         * ========================================
+         * HÄMTA MÖTESDATA FÖR EN MÅNAD
+         * ========================================
+         */
+        function hamtaMotesdata(manad) {
+            const data = MOTESDATUM[manad];
+            if (!data) return null;
+            
+            // Skapa fullständig mötesinfo för varje dag
+            const bokningar = data.dagar.map((dag, index) => {
+                const datum = new Date(2026, manad, dag);
+                const dagTyp = index === 0 ? 'dag1' : (index === 1 ? 'dag2' : 'dag3');
+                
+                return {
+                    dag: dag,
+                    datum: datum,
+                    veckodag: hamtaVeckodag(datum),
+                    kortVeckodag: hamtaKortVeckodag(datum),
+                    moten: MOTES_SCHEMA[dagTyp],
+                    dagNr: index + 1
+                };
+            });
+            
+            // Vilken månad vi granskar (månaden innan)
+            const granskadManadIndex = manad === 0 ? 11 : manad - 1;
+            const granskadManad = MANAD_NAMN[granskadManadIndex];
+            
+            return {
+                bokningar: bokningar,
+                standard: data.standard,
+                forklaring: data.forklaring,
+                detalj: data.detalj,
+                granskadManad: granskadManad
+            };
+        }
+        
+        /**
+         * ========================================
+         * GENERERA MÅNADSKALENDER (HTML)
+         * ========================================
+         */
+        function genereraManadsKalender(ar, manad) {
+            const motesdata = hamtaMotesdata(manad);
+            if (!motesdata) return '';
+            
+            const antalDagar = antalDagarIManad(ar, manad);
+            const forstaDag = forstaDagenIManad(ar, manad);
+            
+            // Skapa en uppsättning av bokade datum för snabb lookup
+            const bokadeDatum = new Map();
+            motesdata.bokningar.forEach(b => {
+                bokadeDatum.set(b.dag, b);
+            });
+            
+            // Börja bygga HTML för månadskortet
+            const headerClass = motesdata.standard ? '' : 'adjusted';
+            const cardClass = motesdata.standard ? '' : 'has-adjustment';
+            const adjustmentBadge = motesdata.standard ? '' : '<span class="adjustment-badge">Anpassad</span>';
+            
+            let html = `
+                <div class="month-card ${cardClass}">
+                    <div class="month-header ${headerClass}">
+                        <h3>${MANAD_NAMN[manad]} ${adjustmentBadge}</h3>
+                        <span class="review-period">Granskar: ${motesdata.granskadManad}</span>
+                    </div>
+                    <div class="month-body">
+                        <!-- Veckodagsrubriker -->
+                        <div class="weekday-row">
+                            ${VECKODAGAR.map(d => `<span>${d}</span>`).join('')}
+                        </div>
+                        
+                        <!-- Datumrutnät -->
+                        <div class="days-grid">
+            `;
+            
+            // Lägg till tomma celler för dagarna innan månaden börjar
+            for (let i = 0; i < forstaDag; i++) {
+                html += `<div class="day-cell empty"></div>`;
+            }
+            
+            // Lägg till alla dagar i månaden
+            for (let dag = 1; dag <= antalDagar; dag++) {
+                const datum = new Date(ar, manad, dag);
+                const arHelgdag = arHelg(datum);
+                const bokning = bokadeDatum.get(dag);
+                
+                // Bestäm CSS-klasser för cellen
+                let klasser = ['day-cell'];
+                let tooltip = '';
+                let onclick = '';
+                
+                if (bokning) {
+                    // Detta är en mötesdag
+                    klasser.push('has-meetings');
+                    if (!motesdata.standard) {
+                        klasser.push('adjusted');
+                    }
+                    
+                    // Skapa tooltip
+                    const regelTyp = motesdata.standard ? 'Standarddatum' : 'Anpassat datum';
+                    const motesLista = bokning.moten.map(m => m.namn).join(' + ');
+                    
+                    tooltip = `
+                        <div class="tooltip">
+                            <div class="tooltip-title">Dag ${bokning.dagNr}: ${motesLista}</div>
+                            <div>${bokning.veckodag} ${dag} ${MANAD_NAMN[manad]}</div>
+                            <div class="tooltip-rule">
+                                <strong>${regelTyp}:</strong> ${motesdata.forklaring}
+                            </div>
+                        </div>
+                    `;
+                    
+                    onclick = `onclick="visaMoteDetaljer(${manad}, ${dag})"`;
+                    
+                } else if (arHelgdag) {
+                    klasser.push('weekend');
+                } else {
+                    klasser.push('normal');
+                }
+                
+                html += `<div class="${klasser.join(' ')}" ${onclick}>${dag}${tooltip}</div>`;
+            }
+            
+            // Fyll ut med tomma celler till slutet av sista veckan
+            const totalCeller = forstaDag + antalDagar;
+            const tommaSlut = (7 - (totalCeller % 7)) % 7;
+            for (let i = 0; i < tommaSlut; i++) {
+                html += `<div class="day-cell empty"></div>`;
+            }
+            
+            html += `
+                        </div>
+                        
+                        <!-- Mötesschema för månaden -->
+                        <div class="month-meetings">
+            `;
+            
+            // Lägg till förklaringsruta om det är anpassat schema
+            if (!motesdata.standard) {
+                html += `
+                    <div class="adjustment-note">
+                        <strong>⚠️ Anpassat schema:</strong> ${motesdata.forklaring}
+                    </div>
+                `;
+            }
+            
+            // Lägg till mötesdetaljer för varje bokad dag
+            motesdata.bokningar.forEach((bokning) => {
+                const badgeClass = motesdata.standard ? '' : 'adjusted';
+                const veckodagCapitalized = bokning.veckodag.charAt(0).toUpperCase() + bokning.veckodag.slice(1);
+                
+                html += `
+                    <div class="meeting-day">
+                        <div class="meeting-day-header">
+                            <span class="day-badge ${badgeClass}">${bokning.dag}:e</span>
+                            ${veckodagCapitalized} – Dag ${bokning.dagNr}
+                        </div>
+                `;
+                
+                bokning.moten.forEach(mote => {
+                    html += `
+                        <div class="meeting-item">
+                            <span class="dot ${mote.klass}"></span>
+                            <span>${mote.tid}: ${mote.namn}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `</div>`;
+            });
+            
+            html += `
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+        
+        /**
+         * ========================================
+         * GENERERA HELA ÅRSKALENDERN
+         * ========================================
+         */
+        function genereraArsKalender() {
+            const ar = 2026;
+            const container = document.getElementById('calendarGrid');
+            
+            let totalHtml = '';
+            
+            // Generera kalender för februari-december (månad 1-11)
+            for (let manad = 1; manad <= 11; manad++) {
+                totalHtml += genereraManadsKalender(ar, manad);
+            }
+            
+            container.innerHTML = totalHtml;
+        }
+        
+        /**
+         * ========================================
+         * VISA MÖTESDETALJER I MODAL
+         * ========================================
+         */
+        function visaMoteDetaljer(manad, dag) {
+            const motesdata = hamtaMotesdata(manad);
+            const bokning = motesdata.bokningar.find(b => b.dag === dag);
+            
+            if (!bokning) return;
+            
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const modalRuleBox = document.getElementById('modalRuleBox');
+            const modalContent = document.getElementById('modalContent');
+            
+            // Sätt titeln
+            const veckodagCapitalized = bokning.veckodag.charAt(0).toUpperCase() + bokning.veckodag.slice(1);
+            modalTitle.textContent = `${veckodagCapitalized} ${dag} ${MANAD_NAMN[manad]} 2026`;
+            modalSubtitle.textContent = `Uppföljning av resultat för ${motesdata.granskadManad}`;
+            
+            // Visa regelrutan
+            const regelKlass = motesdata.standard ? 'standard' : '';
+            const regelTyp = motesdata.standard ? '✓ Standardregel' : '⚠️ Anpassat schema';
+            
+            modalRuleBox.innerHTML = `
+                <div class="modal-rule-box ${regelKlass}">
+                    <h4>${regelTyp}</h4>
+                    <p>${motesdata.detalj}</p>
+                </div>
+            `;
+            
+            // Bygg mötesinnehållet
+            let contentHtml = '';
+            
+            bokning.moten.forEach(mote => {
+                const langd = mote.tid.includes('09:30') ? '30 min' : '1,5 timmar';
+                contentHtml += `
+                    <div class="meeting-detail">
+                        <div class="time-col">${mote.tid.split(' – ')[0]}</div>
+                        <div class="info-col">
+                            <h4 style="color: var(--color-${mote.klass});">${mote.namn}</h4>
+                            <p><strong>Ansvarig:</strong> ${mote.ansvarig}</p>
+                            <p><strong>Ansvarsnummer:</strong> ${mote.ansvarNr}</p>
+                            <p><strong>Längd:</strong> ${langd}</p>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            modalContent.innerHTML = contentHtml;
+            modalOverlay.classList.add('active');
+        }
+        
+        /**
+         * Stäng modalen
+         */
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+        }
+        
+        // Stäng modal vid klick utanför
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+        
+        // Stäng modal med Escape-tangenten
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        /**
+         * ========================================
+         * STARTA APPLIKATIONEN
+         * ========================================
+         */
+        // Generera kalendern när sidan laddas
+        document.addEventListener('DOMContentLoaded', genereraArsKalender);
+    </script>
+</body>
+</html>

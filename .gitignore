@@ -1,0 +1,126 @@
+# ============================================================================
+# .gitignore för Bokslutstider-projektet
+# ============================================================================
+# Denna fil talar om för Git vilka filer som INTE ska versionshanteras
+# Skapad: 2026-02-02
+# ============================================================================
+
+# ============================================================================
+# WINDOWS-SPECIFIKA FILER
+# ============================================================================
+# Windows genererar temporära filer som inte ska committas
+Thumbs.db          # Windows miniatyrbilder
+Desktop.ini        # Windows mappsettings
+*.lnk              # Windows genvägar
+$RECYCLE.BIN/      # Windows papperskorg
+ehthumbs.db        # Windows miniatyrbilder (äldre)
+
+# ============================================================================
+# MacOS-SPECIFIKA FILER (om du jobbar på flera datorer)
+# ============================================================================
+.DS_Store          # MacOS mappsettings
+.AppleDouble
+.LSOverride
+._*                # MacOS resursfiler
+
+# ============================================================================
+# EDITOR- OCH IDE-FILER
+# ============================================================================
+# Olika textredigerare och IDEs skapar egna konfigurationsfiler
+
+# Visual Studio Code
+.vscode/           # VSCode settings (om du vill dela settings, ta bort denna rad)
+*.code-workspace
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# JetBrains IDEs (WebStorm, PHPStorm, etc.)
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# ============================================================================
+# NODE.JS / NPM (om du senare lägger till Node.js i projektet)
+# ============================================================================
+node_modules/      # NPM-paket (tusentals filer, ska ALDRIG committas)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json  # (valfritt - vissa vill ha med denna)
+
+# ============================================================================
+# KÄNSLIG INFORMATION
+# ============================================================================
+# Filer som innehåller lösenord, API-nycklar, etc.
+.env               # Miljövariabler med secrets
+.env.local
+.env.*.local
+secrets.json
+credentials.json
+config.private.js
+
+# ============================================================================
+# BUILD- OCH DIST-MAPPAR
+# ============================================================================
+# Genererade filer från byggprocesser
+dist/
+build/
+out/
+*.min.js           # Minifierade filer
+*.min.css
+
+# ============================================================================
+# LOGGFILER
+# ============================================================================
+*.log              # Alla loggfiler
+logs/
+*.log.*
+
+# ============================================================================
+# TEMPORÄRA FILER
+# ============================================================================
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# ============================================================================
+# BACKUP-FILER
+# ============================================================================
+*.bak              # Backup-filer
+*.backup
+*.old
+*_backup.*
+*_old.*
+
+# ============================================================================
+# PROJEKTSPECIFIKT
+# ============================================================================
+# Lägg till filer specifika för detta projekt här
+
+# Exempel: Om du har en testmapp med stora filer
+# test-data/
+
+# Exempel: Om du genererar PDF-rapporter lokalt som inte ska upp
+# reports/*.pdf
+
+# ============================================================================
+# VARFÖR .gitignore ÄR VIKTIG:
+# ============================================================================
+# 1. SÄKERHET: Förhindrar att känsliga filer (lösenord, nycklar) hamnar på GitHub
+# 2. STORLEK: Håller repot litet genom att exkludera stora/onödiga filer
+# 3. RENHET: Bara relevant källkod versionshanteras, inte genererade filer
+# 4. SAMARBETE: Varje utvecklare kan ha sina egna editor-inställningar
+# ============================================================================

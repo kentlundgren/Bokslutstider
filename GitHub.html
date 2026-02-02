@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Git och GitHub Guide - Bokslutstider</title>
+    
+    <!-- 
+    ============================================================================
+    GIT OCH GITHUB GUIDE
+    ============================================================================
+    Syfte: Lära Kent om Git och GitHub för versionhantering
+    Skapat: 2026-02-02
+    ============================================================================
+    -->
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.75rem 1.5rem;
+            background: #764ba2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section h3 {
+            font-size: 1.3rem;
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .concept-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .concept-box strong {
+            color: #667eea;
+            font-size: 1.1rem;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box strong {
+            color: #856404;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .command {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .command code {
+            color: #50fa7b;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #667eea;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .workflow-diagram {
+            background: #f8f9ff;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .workflow-step {
+            display: inline-block;
+            background: white;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            font-weight: 500;
+        }
+        
+        .arrow {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: #667eea;
+            margin: 0 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #eee;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Git och GitHub Guide</h1>
+            <p>Versionhantering för ditt Bokslutstider-projekt</p>
+            <a href="index.html" class="nav-link">📅 Tillbaka till Möteskalendern</a>
+        </header>
+        
+        <!-- SEKTION 1: Grundläggande koncept -->
+        <section class="section">
+            <h2>📚 Vad är Git och GitHub?</h2>
+            
+            <div class="concept-box">
+                <strong>Git</strong> är ett versionhanteringssystem som körs lokalt på din dator. 
+                Det håller reda på alla ändringar i dina filer och låter dig gå tillbaka till tidigare versioner.
+            </div>
+            
+            <div class="concept-box">
+                <strong>GitHub</strong> är en webbtjänst där du kan lagra dina Git-repon online. 
+                Det fungerar som en backup och gör det möjligt att dela kod med andra.
+            </div>
+            
+            <h3>💡 Tänk på det som:</h3>
+            <ul>
+                <li><strong>Git</strong> = Ett Microsoft Word med "Spåra ändringar" och "Versionshistorik"</li>
+                <li><strong>GitHub</strong> = OneDrive/Google Drive för kodprojekt</li>
+            </ul>
+        </section>
+        
+        <!-- SEKTION 2: Hur de fungerar tillsammans -->
+        <section class="section">
+            <h2>🔄 Hur Git och GitHub fungerar tillsammans</h2>
+            
+            <div class="workflow-diagram">
+                <div class="workflow-step">Arbeta lokalt</div>
+                <span class="arrow">→</span>
+                <div class="workflow-step">Spara i Git</div>
+                <span class="arrow">→</span>
+                <div class="workflow-step">Pusha till GitHub</div>
+                <span class="arrow">→</span>
+                <div class="workflow-step">Säker backup</div>
+            </div>
+            
+            <h3>Viktiga begrepp:</h3>
+            
+            <div class="concept-box">
+                <strong>Repository (repo)</strong><br>
+                En mapp som Git håller koll på. Den innehåller alla dina filer plus historiken av ändringar.
+            </div>
+            
+            <div class="concept-box">
+                <strong>Commit</strong><br>
+                En "snapshot" av dina filer vid ett visst tillfälle. Som att spara en version med ett meddelande om vad du ändrat.
+            </div>
+            
+            <div class="concept-box">
+                <strong>Push</strong><br>
+                Skicka dina lokala commits (ändringar) till GitHub.
+            </div>
+            
+            <div class="concept-box">
+                <strong>Pull</strong><br>
+                Hämta ändringar från GitHub till din lokala dator.
+            </div>
+        </section>
+        
+        <!-- SEKTION 3: Steg-för-steg guide -->
+        <section class="section">
+            <h2>🛠️ Steg-för-steg: Sätta upp ditt projekt</h2>
+            
+            <ol class="step-list">
+                <li>
+                    <strong>Installera Git</strong><br>
+                    Ladda ner från <a href="https://git-scm.com/" target="_blank">git-scm.com</a> och installera.
+                    <div class="command">
+                        # Verifiera installationen i PowerShell:<br>
+                        <code>git --version</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Konfigurera Git (en gång)</strong><br>
+                    Tala om vem du är:
+                    <div class="command">
+                        <code>git config --global user.name "Kent Lundgren"</code><br>
+                        <code>git config --global user.email "din.epost@exempel.se"</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Skapa ett lokalt Git-repo</strong><br>
+                    Gå till din projektmapp och initiera Git:
+                    <div class="command">
+                        <code>cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"</code><br>
+                        <code>git init</code>
+                    </div>
+                    <div class="success-box">
+                        ✅ Nu är mappen ett Git-repo! En dold mapp <code>.git</code> skapas som lagrar historiken.
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Skapa .gitignore-fil</strong><br>
+                    En fil som talar om vilka filer Git ska ignorera:
+                    <div class="command">
+                        # Exempel på innehåll i .gitignore:<br>
+                        <code>node_modules/</code><br>
+                        <code>.DS_Store</code><br>
+                        <code>*.log</code><br>
+                        <code>.env</code>
+                    </div>
+                    <div class="warning-box">
+                        <strong>⚠️ Viktigt:</strong> .gitignore förhindrar att känsliga filer (lösenord, API-nycklar) pushas till GitHub!
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Lägg till filer i staging</strong><br>
+                    Välj vilka filer som ska ingå i nästa commit:
+                    <div class="command">
+                        <code>git add .</code>  # Lägger till alla filer<br>
+                        eller<br>
+                        <code>git add index.html</code>  # Lägger till en specifik fil
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Skapa din första commit</strong><br>
+                    Spara en version med ett beskrivande meddelande:
+                    <div class="command">
+                        <code>git commit -m "Initial commit: Möteskalender 2026"</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Skapa ett repo på GitHub</strong><br>
+                    - Gå till <a href="https://github.com" target="_blank">github.com</a> och logga in<br>
+                    - Klicka på "New repository" (gröna knappen)<br>
+                    - Namnge den: <code>bokslutstider</code><br>
+                    - Välj "Public" eller "Private"<br>
+                    - <strong>VIKTIGT:</strong> LÄGG INTE till README, .gitignore eller licens (gör detta senare)<br>
+                    - Klicka "Create repository"
+                </li>
+                
+                <li>
+                    <strong>Koppla lokalt repo till GitHub</strong><br>
+                    Koppla samman din lokala mapp med GitHub-repot:
+                    <div class="command">
+                        <code>git remote add origin https://github.com/DITT-ANVÄNDARNAMN/bokslutstider.git</code>
+                    </div>
+                    <div class="warning-box">
+                        <strong>Observera:</strong> Byt ut <code>DITT-ANVÄNDARNAMN</code> mot ditt riktiga GitHub-användarnamn!
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Pusha till GitHub</strong><br>
+                    Skicka upp dina filer första gången:
+                    <div class="command">
+                        <code>git branch -M main</code>  # Byter namn på huvudgrenen till "main"<br>
+                        <code>git push -u origin main</code>  # Pushar till GitHub
+                    </div>
+                    <div class="success-box">
+                        🎉 <strong>Klart!</strong> Nu finns dina filer på GitHub!
+                    </div>
+                </li>
+            </ol>
+        </section>
+        
+        <!-- SEKTION 4: Dagligt arbetsflöde -->
+        <section class="section">
+            <h2>📅 Dagligt arbetsflöde</h2>
+            
+            <p>När du jobbar med projektet framöver, följ dessa steg:</p>
+            
+            <div class="command">
+                # 1. Kontrollera status<br>
+                <code>git status</code><br><br>
+                
+                # 2. Lägg till ändringar<br>
+                <code>git add .</code><br><br>
+                
+                # 3. Commit med meddelande<br>
+                <code>git commit -m "Beskrivning av vad du ändrat"</code><br><br>
+                
+                # 4. Pusha till GitHub<br>
+                <code>git push</code>
+            </div>
+            
+            <h3>Bra commit-meddelanden:</h3>
+            <ul>
+                <li>✅ "Lagt till februari-månad i kalendern"</li>
+                <li>✅ "Fixat bug med helgdatumkontroll"</li>
+                <li>✅ "Uppdaterat CSS för mobilvy"</li>
+                <li>❌ "fix" (för vagt)</li>
+                <li>❌ "diverse ändringar" (inte beskrivande)</li>
+            </ul>
+        </section>
+        
+        <!-- SEKTION 5: Viktiga tips -->
+        <section class="section">
+            <h2>💡 Viktiga tips för att Git och GitHub ska fungera bra</h2>
+            
+            <div class="warning-box">
+                <strong>1. Commit ofta!</strong><br>
+                Gör små, frekventa commits istället för stora sällan. Det gör det lättare att hitta och ångra fel.
+            </div>
+            
+            <div class="warning-box">
+                <strong>2. Skriv tydliga commit-meddelanden</strong><br>
+                Ditt framtida jag kommer att tacka dig när du behöver hitta när en specifik ändring gjordes.
+            </div>
+            
+            <div class="warning-box">
+                <strong>3. Pusha regelbundet</strong><br>
+                Även om du committar lokalt, kom ihåg att pusha till GitHub så du har en backup.
+            </div>
+            
+            <div class="warning-box">
+                <strong>4. Använd .gitignore från start</strong><br>
+                Lägg aldrig till känslig information (lösenord, API-nycklar) i Git. Använd .gitignore!
+            </div>
+            
+            <div class="warning-box">
+                <strong>5. Läs status före commit</strong><br>
+                Kör alltid <code>git status</code> innan du committar för att se exakt vad som kommer inkluderas.
+            </div>
+            
+            <div class="warning-box">
+                <strong>6. Testa att klona</strong><br>
+                Testa ibland att klona repot till en annan mapp för att säkerställa att allt fungerar:
+                <div class="command">
+                    <code>git clone https://github.com/DITT-ANVÄNDARNAMN/bokslutstider.git testmapp</code>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEKTION 6: Användbara kommandon -->
+        <section class="section">
+            <h2>🔧 Användbara Git-kommandon</h2>
+            
+            <div class="command">
+                # Se historik av commits<br>
+                <code>git log --oneline</code><br><br>
+                
+                # Se vad som ändrats (före git add)<br>
+                <code>git diff</code><br><br>
+                
+                # Ångra ändringar i en fil (före git add)<br>
+                <code>git checkout -- filnamn.html</code><br><br>
+                
+                # Ta bort fil från staging (efter git add)<br>
+                <code>git reset filnamn.html</code><br><br>
+                
+                # Se vilka filer som ignorerats<br>
+                <code>git status --ignored</code><br><br>
+                
+                # Hämta senaste från GitHub<br>
+                <code>git pull</code>
+            </div>
+        </section>
+        
+        <!-- SEKTION 7: Felsökning -->
+        <section class="section">
+            <h2>🆘 Vanliga problem och lösningar</h2>
+            
+            <h3>Problem: "Permission denied" när du pushar</h3>
+            <div class="concept-box">
+                <strong>Lösning:</strong> Du behöver autentisera dig mot GitHub. Använd antingen:<br>
+                - Personal Access Token (rekommenderat)<br>
+                - GitHub Desktop (enklare för nybörjare)
+            </div>
+            
+            <h3>Problem: "Please tell me who you are"</h3>
+            <div class="concept-box">
+                <strong>Lösning:</strong> Kör steg 2 ovan för att konfigurera ditt namn och e-post.
+            </div>
+            
+            <h3>Problem: Råkat committa fel fil</h3>
+            <div class="concept-box">
+                <strong>Lösning:</strong> Om du INTE pushat än:<br>
+                <div class="command">
+                    <code>git reset HEAD~1</code>  # Ångrar senaste commit
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEKTION 8: Resurser -->
+        <section class="section">
+            <h2>📖 Läs mer</h2>
+            
+            <ul>
+                <li><a href="https://git-scm.com/book/sv/v2" target="_blank">Git Bok (svenska)</a></li>
+                <li><a href="https://docs.github.com/sv" target="_blank">GitHub Dokumentation (svenska)</a></li>
+                <li><a href="https://desktop.github.com/" target="_blank">GitHub Desktop</a> - Grafiskt gränssnitt för Git</li>
+                <li><a href="https://learngitbranching.js.org/?locale=sv_SE" target="_blank">Learn Git Branching</a> - Interaktiv tutorial</li>
+            </ul>
+        </section>
+        
+        <footer>
+            <p><strong>💻 Projekt:</strong> Bokslutstider - Simrishamns Kommun</p>
+            <p><strong>👨‍💼 Skapad för:</strong> Kent Lundgren</p>
+            <p><strong>📅 Datum:</strong> 2026-02-02</p>
+        </footer>
+    </div>
+</body>
+</html>
