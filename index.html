@@ -603,9 +603,30 @@
             animation: none; /* Stoppa animation vid hover */
         }
         
-        /* Tertial månadskort får speciell ram */
+        /* Tertial månadskort får speciell ram + subtil pulsering */
         .month-card.tertial-month {
             box-shadow: 0 0 0 3px var(--color-tertial), var(--shadow-medium);
+            animation: tertial-card-pulse 3s ease-in-out infinite;
+        }
+        
+        /* UPPDATERING 2026-02-02: Diskret pulsering för hela månadskortet */
+        @keyframes tertial-card-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px var(--color-tertial), 
+                            0 4px 20px rgba(212, 175, 55, 0.15);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 3px var(--color-tertial), 
+                            0 6px 30px rgba(212, 175, 55, 0.35),
+                            0 0 20px rgba(212, 175, 55, 0.2);
+                transform: scale(1.01);
+            }
+        }
+        
+        /* Pausa kortets pulsering när man hovrar */
+        .month-card.tertial-month:hover {
+            animation-play-state: paused;
         }
         
         /* Tertial header får speciell färg */
