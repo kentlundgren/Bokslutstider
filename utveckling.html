@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide: Utveckling med Git Branches</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        header h1 {
+            font-size: 2.5rem;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        
+        header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+        
+        .nav-links {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .nav-link {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: #764ba2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section h2 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .section h3 {
+            font-size: 1.3rem;
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .info-box {
+            background: #f8f9ff;
+            border-left: 4px solid #667eea;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .command {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 0.5rem 0;
+            overflow-x: auto;
+        }
+        
+        .command code {
+            color: #50fa7b;
+        }
+        
+        .step-list {
+            counter-reset: step-counter;
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .step-list li {
+            counter-increment: step-counter;
+            margin-bottom: 1.5rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+        
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #667eea;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .workflow-diagram {
+            background: #f8f9ff;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+        
+        .workflow-step {
+            display: inline-block;
+            background: white;
+            padding: 1rem 1.5rem;
+            margin: 0.5rem;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            font-weight: 500;
+        }
+        
+        .arrow {
+            display: inline-block;
+            font-size: 1.5rem;
+            color: #667eea;
+            margin: 0 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        table th, table td {
+            padding: 0.75rem;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        
+        table th {
+            background: #667eea;
+            color: white;
+        }
+        
+        table tr:nth-child(even) {
+            background: #f8f9ff;
+        }
+        
+        ul, ol {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #eee;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌿 Guide: Utveckling med Git Branches</h1>
+            <p>Hur du säkert testar nya funktioner utan att påverka huvudprojektet</p>
+        </header>
+        
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">📅 Möteskalendern</a>
+            <a href="GitHub.html" class="nav-link">🚀 Git Guide</a>
+            <a href="https://github.com/kentlundgren/Bokslutstider" target="_blank" class="nav-link">📂 GitHub Repo</a>
+        </div>
+        
+        <!-- SEKTION 1: Vad är en branch? -->
+        <section class="section">
+            <h2>💡 Vad är en Git Branch?</h2>
+            
+            <div class="info-box">
+                <strong>Branch = Gren</strong><br>
+                En branch är som en parallell version av ditt projekt där du kan experimentera och göra ändringar 
+                utan att påverka huvudversionen (main/master).
+            </div>
+            
+            <div class="workflow-diagram">
+                <div style="font-weight: bold; margin-bottom: 1rem;">Så fungerar branches:</div>
+                <div class="workflow-step">main (original)</div>
+                <span class="arrow">→</span>
+                <div class="workflow-step">ny-layout (kopia)</div>
+                <br>
+                <div style="margin-top: 1rem; font-size: 0.9rem;">
+                    ✅ Main är säker och oförändrad<br>
+                    🎨 Du experimenterar i ny-layout<br>
+                    🔄 När klar: Merge tillbaka till main
+                </div>
+            </div>
+            
+            <h3>Fördelar med branches:</h3>
+            <ul>
+                <li>✅ <strong>Säkerhet:</strong> Main-versionen påverkas inte av dina experiment</li>
+                <li>✅ <strong>Frihet:</strong> Testa vilda idéer utan risk</li>
+                <li>✅ <strong>Organisation:</strong> Olika funktioner i olika branches</li>
+                <li>✅ <strong>Ångra lätt:</strong> Fungerar inte? Kasta branchen!</li>
+                <li>✅ <strong>Samarbete:</strong> Flera personer kan jobba parallellt</li>
+            </ul>
+        </section>
+        
+        <!-- SEKTION 2: Skapa en utvecklingsbranch -->
+        <section class="section">
+            <h2>🌱 Skapa en utvecklingsbranch</h2>
+            
+            <h3>Steg 1: Öppna PowerShell</h3>
+            <div class="command">
+                # Windows-tangenten → skriv "PowerShell" → Enter
+            </div>
+            
+            <h3>Steg 2: Gå till projektet</h3>
+            <div class="command">
+                <code>cd "d:\VåraFiler_primära_på_SSD\Kent_dokument\Data\HTML\kentlundgren_se\arbete\SK\Bokslutstider"</code>
+            </div>
+            
+            <h3>Steg 3: Skapa och byt till ny branch</h3>
+            <div class="command">
+                # Skapa branch och byt till den direkt<br>
+                <code>git checkout -b ny-layout</code><br><br>
+                
+                # Alternativt: Skapa först, byt sedan<br>
+                <code>git branch ny-layout</code>  # Skapa<br>
+                <code>git checkout ny-layout</code>  # Byt till
+            </div>
+            
+            <h3>Steg 4: Verifiera att du är på rätt branch</h3>
+            <div class="command">
+                <code>git branch</code><br><br>
+                
+                # Du ska se:<br>
+                #   main<br>
+                # * ny-layout  ← Stjärnan visar att du är här!
+            </div>
+            
+            <div class="success-box">
+                ✅ <strong>Nu är du redo!</strong> Allt du gör sparas i ny-layout-branchen. 
+                Main är orörd och säker.
+            </div>
+        </section>
+        
+        <!-- SEKTION 3: Arbetsflöde under utveckling -->
+        <section class="section">
+            <h2>🔄 Arbetsflöde under utveckling</h2>
+            
+            <h3>1. Gör ändringar i Cursor</h3>
+            <ul>
+                <li>Öppna och ändra filer som vanligt</li>
+                <li>Testa i webbläsaren (öppna index.html)</li>
+                <li>Experimentera fritt - main är säker!</li>
+            </ul>
+            
+            <h3>2. Spara ändringar ofta med commits</h3>
+            <div class="command">
+                # Se vad som ändrats<br>
+                <code>git status</code><br><br>
+                
+                # Lägg till alla ändringar<br>
+                <code>git add .</code><br><br>
+                
+                # Committa med beskrivande meddelande<br>
+                <code>git commit -m "Uppdaterat header-design med nya färger"</code><br><br>
+                
+                # Pusha till GitHub (första gången på ny branch)<br>
+                <code>git push -u origin ny-layout</code><br><br>
+                
+                # Senare pushes (när origin är satt)<br>
+                <code>git push</code>
+            </div>
+            
+            <div class="info-box">
+                💡 <strong>Tips:</strong> Committa ofta med små, logiska ändringar. 
+                T.ex. "Ändrat färgschema", "Justerat layout för mobil", "Fixat bug i navigation".
+            </div>
+            
+            <h3>3. Byta mellan branches</h3>
+            <div class="command">
+                # Tillbaka till main (original-versionen)<br>
+                <code>git checkout main</code><br><br>
+                
+                # Tillbaka till utveckling<br>
+                <code>git checkout ny-layout</code><br><br>
+                
+                # Lista alla branches<br>
+                <code>git branch</code>
+            </div>
+            
+            <div class="warning-box">
+                ⚠️ <strong>Viktigt:</strong> Committa ALLTID innan du byter branch! 
+                Om du har osparade ändringar kan de gå förlorade.
+            </div>
+        </section>
+        
+        <!-- SEKTION 4: Användbara kommandon -->
+        <section class="section">
+            <h2>🔧 Användbara Git-kommandon för branches</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Kommando</th>
+                        <th>Vad det gör</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>git branch</code></td>
+                        <td>Lista alla branches (stjärnan visar var du är)</td>
+                    </tr>
+                    <tr>
+                        <td><code>git branch namn</code></td>
+                        <td>Skapa ny branch (men byter inte till den)</td>
+                    </tr>
+                    <tr>
+                        <td><code>git checkout -b namn</code></td>
+                        <td>Skapa OCH byt till ny branch</td>
+                    </tr>
+                    <tr>
+                        <td><code>git checkout namn</code></td>
+                        <td>Byt till existerande branch</td>
+                    </tr>
+                    <tr>
+                        <td><code>git status</code></td>
+                        <td>Se vilken branch du är på + ändringar</td>
+                    </tr>
+                    <tr>
+                        <td><code>git diff main..ny-layout</code></td>
+                        <td>Jämför skillnader mellan två branches</td>
+                    </tr>
+                    <tr>
+                        <td><code>git log --oneline</code></td>
+                        <td>Se commit-historik för aktuell branch</td>
+                    </tr>
+                    <tr>
+                        <td><code>git push -u origin namn</code></td>
+                        <td>Pusha branch till GitHub första gången</td>
+                    </tr>
+                    <tr>
+                        <td><code>git push</code></td>
+                        <td>Pusha uppdateringar (när origin är satt)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+        
+        <!-- SEKTION 5: När du är klar med utvecklingen -->
+        <section class="section">
+            <h2>✅ När du är klar och nöjd med ändringarna</h2>
+            
+            <h3>Alternativ 1: Merge via PowerShell (snabbare)</h3>
+            <ol class="step-list">
+                <li>
+                    <strong>Kontrollera att allt är committat</strong>
+                    <div class="command">
+                        <code>git status</code><br>
+                        # Ska visa: "nothing to commit, working tree clean"
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Byt till main-branchen</strong>
+                    <div class="command">
+                        <code>git checkout main</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Merge in din utvecklingsbranch</strong>
+                    <div class="command">
+                        <code>git merge ny-layout</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Pusha uppdaterad main till GitHub</strong>
+                    <div class="command">
+                        <code>git push</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>(Valfritt) Ta bort utvecklingsbranchen</strong>
+                    <div class="command">
+                        # Lokalt<br>
+                        <code>git branch -d ny-layout</code><br><br>
+                        
+                        # På GitHub<br>
+                        <code>git push origin --delete ny-layout</code>
+                    </div>
+                </li>
+            </ol>
+            
+            <h3>Alternativ 2: Merge via GitHub Pull Request (rekommenderas!)</h3>
+            <ol class="step-list">
+                <li>
+                    <strong>Pusha din branch till GitHub</strong>
+                    <div class="command">
+                        <code>git push -u origin ny-layout</code>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Gå till GitHub-repot</strong><br>
+                    <a href="https://github.com/kentlundgren/Bokslutstider" target="_blank">
+                        https://github.com/kentlundgren/Bokslutstider
+                    </a>
+                </li>
+                
+                <li>
+                    <strong>Klicka "Compare & pull request"</strong><br>
+                    (Gul banner som dyker upp efter push)
+                    
+                    <div style="margin-top: 1rem; border: 3px solid #d4af37; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <img src="pull_request.jpg" alt="GitHub Pull Request banner" style="width: 100%; display: block;">
+                    </div>
+                    
+                    <div style="background: #fef5e7; border-left: 4px solid #d4af37; padding: 1rem; margin-top: 1rem; border-radius: 4px;">
+                        <strong style="color: #c9a332;">💡 Tips:</strong> Den gula bannern dyker upp automatiskt när du pushat en branch. 
+                        Klicka på den gröna knappen <strong>"Compare & pull request"</strong> (se röd pil i bilden).
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Skriv beskrivning av ändringarna</strong><br>
+                    Beskriv vad du ändrat och varför
+                </li>
+                
+                <li>
+                    <strong>Klicka "Create pull request"</strong>
+                    
+                    <div style="margin-top: 1.5rem; border: 3px solid #27ae60; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <img src="pull_request2.jpg" alt="GitHub Pull Request översikt" style="width: 100%; display: block;">
+                    </div>
+                    
+                    <div style="background: #e8f5e9; border-left: 4px solid #27ae60; padding: 1.2rem; margin-top: 1rem; border-radius: 4px;">
+                        <strong style="color: #2e7d32;">📋 Vad visas på denna sida:</strong>
+                        
+                        <ol style="margin-top: 0.5rem; margin-bottom: 0; padding-left: 1.5rem;">
+                            <li><strong style="color: #27ae60;">🟢 Open</strong> - Pull Request är aktiv och väntar på merge</li>
+                            <li><strong>"kentlundgren wants to merge 5 commits into main from ny-layout"</strong> - Visar vad som ska hända</li>
+                            <li><strong>Conversation</strong> - Din kommentar och beskrivning syns här</li>
+                            <li><strong>Commits (5)</strong> - Lista över alla commits i branchen (kan du klicka för att se detaljer)</li>
+                            <li><strong>Files changed (3)</strong> - Visar vilka filer som ändrats (index.html, utveckling.html, etc.)</li>
+                            <li><strong style="color: #27ae60;">✅ "No conflicts with base branch"</strong> - VIKTIGT! Betyder att merge är säker</li>
+                            <li><strong style="color: #27ae60;">🟢 "Merge pull request"</strong> - Den gröna knappen du ska klicka för att slutföra</li>
+                        </ol>
+                        
+                        <div style="background: white; border: 2px solid #ffd700; padding: 0.8rem; margin-top: 1rem; border-radius: 4px;">
+                            <strong style="color: #f57c00;">⚠️ Tips före merge:</strong><br>
+                            • Klicka på <strong>"Commits"</strong> för att se alla ändringar<br>
+                            • Klicka på <strong>"Files changed"</strong> för att granska koden<br>
+                            • Läs igenom din kommentar en sista gång<br>
+                            • Kontrollera att checkmarken ✅ är grön (inga konflikter)
+                        </div>
+                    </div>
+                </li>
+                
+                <li>
+                    <strong>Granska ändringarna (valfritt men rekommenderat)</strong><br>
+                    Klicka på <strong>"Files changed"</strong>-fliken för att se alla ändringar visuellt.<br>
+                    GitHub markerar tillagd kod i <span style="background: #c8e6c9; padding: 0 4px;">grönt</span> 
+                    och borttagen kod i <span style="background: #ffcdd2; padding: 0 4px;">rött</span>.
+                </li>
+                
+                <li>
+                    <strong>Klicka "Merge pull request"</strong><br>
+                    Den stora gröna knappen längst ner (se bilden ovan)
+                </li>
+                
+                <li>
+                    <strong>Bekräfta merge</strong><br>
+                    Klicka på <strong>"Confirm merge"</strong> som dyker upp
+                </li>
+                
+                <li>
+                    <strong>Uppdatera din lokala main</strong>
+                    <div class="command">
+                        <code>git checkout main</code><br>
+                        <code>git pull</code>
+                    </div>
+                </li>
+            </ol>
+            
+            <div class="success-box">
+                ✅ <strong>Fördelar med Pull Request via GitHub:</strong><br>
+                • Visuell jämförelse av ändringar<br>
+                • Dokumentation av vad som ändrats<br>
+                • Möjlighet att revidera innan merge<br>
+                • Säkrare för nybörjare
+            </div>
+        </section>
+        
+        <!-- SEKTION 6: Om något går fel -->
+        <section class="section">
+            <h2>🆘 Om något går fel</h2>
+            
+            <h3>Scenario 1: Vill kasta alla ändringar och börja om</h3>
+            <div class="command">
+                # Byt till main (säker version)<br>
+                <code>git checkout main</code><br><br>
+                
+                # Ta bort utvecklingsbranchen helt<br>
+                <code>git branch -D ny-layout</code>  # -D = force delete<br><br>
+                
+                # Börja om från början<br>
+                <code>git checkout -b ny-layout-v2</code>
+            </div>
+            
+            <h3>Scenario 2: Ångra senaste commit (men behålla ändringar)</h3>
+            <div class="command">
+                <code>git reset --soft HEAD~1</code><br><br>
+                
+                # Filerna är fortfarande ändrade, men commit är borta<br>
+                # Gör nya ändringar och committa igen
+            </div>
+            
+            <h3>Scenario 3: Vill se vad som ändrats jämfört med main</h3>
+            <div class="command">
+                # Jämför hela branches<br>
+                <code>git diff main..ny-layout</code><br><br>
+                
+                # Jämför specifik fil<br>
+                <code>git diff main..ny-layout -- index.html</code>
+            </div>
+            
+            <h3>Scenario 4: Merge-konflikt!</h3>
+            <div class="warning-box">
+                Om samma rad ändrats i både main och din branch får du en <strong>merge-konflikt</strong>.<br><br>
+                
+                <strong>Så löser du det:</strong><br>
+                1. Git markerar konflikten i filen med:<br>
+                <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code><br>
+                2. Öppna filen i Cursor<br>
+                3. Välj vilken version du vill ha (eller kombinera)<br>
+                4. Ta bort konflikt-markeringarna<br>
+                5. Committa: <code>git commit -m "Löst merge-konflikt"</code>
+            </div>
+        </section>
+        
+        <!-- SEKTION 7: Best practices -->
+        <section class="section">
+            <h2>🌟 Best Practices</h2>
+            
+            <div class="info-box">
+                <h3 style="margin-top: 0;">✅ Gör såhär:</h3>
+                <ul>
+                    <li>Skapa en ny branch för varje ny funktion/experiment</li>
+                    <li>Ge branches beskrivande namn: <code>ny-layout</code>, <code>fix-bug-header</code>, <code>test-nya-farger</code></li>
+                    <li>Committa ofta med små, logiska ändringar</li>
+                    <li>Skriv tydliga commit-meddelanden</li>
+                    <li>Testa grundligt innan merge till main</li>
+                    <li>Håll main-branchen alltid i fungerande skick</li>
+                    <li>Pusha branches till GitHub som backup</li>
+                    <li>Ta bort branches när de är mergade</li>
+                </ul>
+            </div>
+            
+            <div class="warning-box">
+                <h3 style="margin-top: 0;">❌ Undvik detta:</h3>
+                <ul>
+                    <li>Jobba direkt på main för större ändringar</li>
+                    <li>Byta branch med osparade ändringar</li>
+                    <li>Glömma vilket branch du är på</li>
+                    <li>Mergea halv-färdiga funktioner till main</li>
+                    <li>Skapa för många branches samtidigt (bli inte överväldigad)</li>
+                    <li>Använda kryptiska branch-namn: <code>test</code>, <code>ny</code>, <code>temp</code></li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- SEKTION 8: Exempel-scenario -->
+        <section class="section">
+            <h2>📝 Exempel: Komplett arbetsflöde</h2>
+            
+            <div class="workflow-diagram">
+                <div style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <h3>Scenario: Du vill testa en ny färgpalett</h3>
+                    
+                    <div class="command" style="margin: 1rem 0;">
+                        # 1. Skapa branch<br>
+                        <code>git checkout -b nya-farger</code><br><br>
+                        
+                        # 2. Gör ändringar i Cursor (ändra CSS)<br>
+                        <br>
+                        
+                        # 3. Testa i webbläsare<br>
+                        # Öppna index.html och se hur det ser ut<br>
+                        <br>
+                        
+                        # 4. Committa ändringar<br>
+                        <code>git add .</code><br>
+                        <code>git commit -m "Testat nya färgpaletten - blå/grön tema"</code><br><br>
+                        
+                        # 5. Pusha till GitHub som backup<br>
+                        <code>git push -u origin nya-farger</code><br><br>
+                        
+                        # 6. Fortsätt justera, testa, committa...<br>
+                        <code>git add .</code><br>
+                        <code>git commit -m "Justerat kontrast för bättre läsbarhet"</code><br>
+                        <code>git push</code><br><br>
+                        
+                        # 7. Nöjd? Merge till main via GitHub PR<br>
+                        # Gå till GitHub → Create Pull Request<br>
+                        <br>
+                        
+                        # 8. Efter merge: Uppdatera lokal main<br>
+                        <code>git checkout main</code><br>
+                        <code>git pull</code><br><br>
+                        
+                        # 9. Ta bort utvecklingsbranch<br>
+                        <code>git branch -d nya-farger</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- SEKTION 9: Snabbreferens -->
+        <section class="section">
+            <h2>📋 Snabbreferens - Kommandon att minnas</h2>
+            
+            <div class="command">
+                # ═══════════════════════════════════════════<br>
+                # SKAPA & BYTA BRANCH<br>
+                # ═══════════════════════════════════════════<br>
+                <code>git checkout -b branch-namn</code>    # Skapa + byt<br>
+                <code>git checkout branch-namn</code>       # Byt till existerande<br>
+                <code>git branch</code>                     # Lista alla<br>
+                <br>
+                # ═══════════════════════════════════════════<br>
+                # SPARA ARBETE<br>
+                # ═══════════════════════════════════════════<br>
+                <code>git status</code>                     # Se ändringar<br>
+                <code>git add .</code>                      # Lägg till allt<br>
+                <code>git commit -m "meddelande"</code>     # Committa<br>
+                <code>git push</code>                       # Pusha till GitHub<br>
+                <br>
+                # ═══════════════════════════════════════════<br>
+                # MERGE TILLBAKA TILL MAIN<br>
+                # ═══════════════════════════════════════════<br>
+                <code>git checkout main</code>              # Byt till main<br>
+                <code>git merge branch-namn</code>          # Merge in ändringar<br>
+                <code>git push</code>                       # Pusha main<br>
+                <br>
+                # ═══════════════════════════════════════════<br>
+                # STÄDA UPP<br>
+                # ═══════════════════════════════════════════<br>
+                <code>git branch -d branch-namn</code>      # Ta bort lokalt<br>
+                <code>git push origin --delete branch-namn</code>  # Ta bort på GitHub
+            </div>
+        </section>
+        
+        <footer>
+            <p><strong>💻 Projekt:</strong> Bokslutstider - Simrishamns Kommun</p>
+            <p><strong>📚 Mer info:</strong> <a href="GitHub.html">Git och GitHub Guide</a></p>
+            <p><strong>🔗 Länkar:</strong> 
+                <a href="index.html">Möteskalender</a> | 
+                <a href="https://github.com/kentlundgren/Bokslutstider" target="_blank">GitHub Repo</a> | 
+                <a href="https://kentlundgren.github.io/Bokslutstider/" target="_blank">Live Demo</a>
+            </p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                <strong>Skapad:</strong> 2026-02-02 | <strong>För:</strong> Kent Lundgren
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

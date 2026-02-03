@@ -21,6 +21,20 @@
     Undantag: Vid helgkrock flyttas möten enligt fördefinierat schema
     
     Period: Februari - December 2026
+    
+    ============================================================================
+    UPPDATERING 2026-02-02: TERTIALBOKSLUT
+    ============================================================================
+    Lagt till visuell markering för extra viktiga tertialbokslut:
+    - MAJ: T1 Tertialbokslut (sammanställer januari-april)
+    - SEPTEMBER: T2 Delårsbokslut (sammanställer maj-augusti)
+    - JANUARI (2027): Årsbokslut (sammanställer hela året)
+    
+    Funktioner:
+    - Diskret pulsande animation på tertialdatum (guld färg)
+    - Speciell badge i månadshuvud
+    - Extra information i tooltips om vad som sammanställs
+    - Guld färgkodning för att skilja från vanliga möten
     ============================================================================
     -->
     
@@ -60,6 +74,11 @@
             /* Anpassade datum */
             --color-adjusted: #f39c12;
             --color-adjusted-bg: #fef9e7;
+            
+            /* UPPDATERING 2026-02-02: Tertialbokslut - Extra viktiga möten */
+            --color-tertial: #d4af37;           /* Guld - Tertialbokslut */
+            --color-tertial-glow: rgba(212, 175, 55, 0.4);
+            --color-tertial-bg: #fef5e7;
             
             /* UI-färger */
             --border-light: #e8e4df;
@@ -384,6 +403,14 @@
             color: white;
         }
         
+        /* UPPDATERING 2026-02-02: Tertialbokslut i legend */
+        .legend-item .sample.tertial {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: white;
+            animation: tertial-pulse 2.5s ease-in-out infinite;
+            border: 2px solid #c9a332;
+        }
+        
         .legend-item .sample.weekend {
             background: var(--color-weekend-bg);
             color: var(--color-weekend);
@@ -544,6 +571,82 @@
         
         /* 
         ========================================
+        UPPDATERING 2026-02-02: TERTIALBOKSLUT
+        ========================================
+        Extra markering för viktiga tertialbokslut
+        */
+        
+        /* Tertialbokslut - diskret pulsande animation */
+        @keyframes tertial-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 var(--color-tertial-glow),
+                            0 4px 12px rgba(212, 175, 55, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 0 8px transparent,
+                            0 4px 20px rgba(212, 175, 55, 0.5);
+            }
+        }
+        
+        /* Dag med tertialbokslut - GULD med pulsande effekt */
+        .day-cell.has-meetings.tertial {
+            background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+            color: white;
+            font-weight: 700;
+            animation: tertial-pulse 2.5s ease-in-out infinite;
+            border: 2px solid #c9a332;
+        }
+        
+        .day-cell.has-meetings.tertial:hover {
+            transform: scale(1.15);
+            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.6);
+            animation: none; /* Stoppa animation vid hover */
+        }
+        
+        /* Tertial månadskort får speciell ram + subtil pulsering */
+        .month-card.tertial-month {
+            box-shadow: 0 0 0 3px var(--color-tertial), var(--shadow-medium);
+            animation: tertial-card-pulse 3s ease-in-out infinite;
+        }
+        
+        /* UPPDATERING 2026-02-02: Diskret pulsering för hela månadskortet */
+        @keyframes tertial-card-pulse {
+            0%, 100% {
+                box-shadow: 0 0 0 3px var(--color-tertial), 
+                            0 4px 20px rgba(212, 175, 55, 0.15);
+                transform: scale(1);
+            }
+            50% {
+                box-shadow: 0 0 0 3px var(--color-tertial), 
+                            0 6px 30px rgba(212, 175, 55, 0.35),
+                            0 0 20px rgba(212, 175, 55, 0.2);
+                transform: scale(1.01);
+            }
+        }
+        
+        /* Pausa kortets pulsering när man hovrar */
+        .month-card.tertial-month:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Tertial header får speciell färg */
+        .month-header.tertial {
+            background: linear-gradient(135deg, #d4af37 0%, #c9a332 100%);
+        }
+        
+        .month-header .tertial-badge {
+            background: rgba(255,255,255,0.9);
+            color: #c9a332;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+        
+        /* 
+        ========================================
         TOOLTIP / HOVER-INFORMATION
         ========================================
         */
@@ -652,6 +755,13 @@
         
         .meeting-day-header .day-badge.adjusted {
             background: var(--color-adjusted);
+        }
+        
+        /* UPPDATERING 2026-02-02: Tertial-badge */
+        .meeting-day-header .day-badge.tertial {
+            background: var(--color-tertial);
+            font-weight: 700;
+            animation: tertial-pulse 2.5s ease-in-out infinite;
         }
         
         .meeting-item {
@@ -833,6 +943,12 @@
         
         .modal-rule-box.standard {
             border-left-color: #27ae60;
+        }
+        
+        /* UPPDATERING 2026-02-02: Tertialbokslut i modal */
+        .modal-rule-box.tertial {
+            border-left-color: var(--color-tertial);
+            background: var(--color-tertial-bg);
         }
         
         .modal-rule-box h4 {
@@ -1072,6 +1188,10 @@
                     <span>Anpassat datum (helgkrock)</span>
                 </div>
                 <div class="legend-item">
+                    <span class="sample tertial">📊</span>
+                    <span><strong>Tertialbokslut</strong> (Maj T1, Sep T2) / Årsbokslut (Jan)</span>
+                </div>
+                <div class="legend-item">
                     <span class="sample weekend">11</span>
                     <span>Helg (ej tillgänglig)</span>
                 </div>
@@ -1273,12 +1393,14 @@
                 detalj: '11:e april är lördag och 12:e är söndag. Mötena flyttas till onsdag 8:e, torsdag 9:e och fredag 10:e.'
             },
             
-            // MAJ - Anpassat (10:e sön → dela upp)
+            // MAJ - Anpassat (10:e sön → dela upp) + T1 TERTIALBOKSLUT
             4: {
                 dagar: [8, 11, 12],
                 standard: false,
                 forklaring: 'Söndag 10 maj – mötena delas upp.',
-                detalj: '10:e maj är söndag. Dag 1 flyttas till fredag 8:e. Dag 2 och 3 hålls måndag 11:e och tisdag 12:e.'
+                detalj: '10:e maj är söndag. Dag 1 flyttas till fredag 8:e. Dag 2 och 3 hålls måndag 11:e och tisdag 12:e.',
+                tertial: 'T1',
+                tertialInfo: '📊 TERTIALBOKSLUT T1 – Sammanställning av första tertialet (januari–april)'
             },
             
             // JUNI - Standard (10:e ons, 11:e tor, 12:e fre)
@@ -1305,12 +1427,14 @@
                 detalj: '10:e, 11:e och 12:e augusti är alla vardagar (måndag–onsdag).'
             },
             
-            // SEPTEMBER - Anpassat (12:e lör → flytta tidigare)
+            // SEPTEMBER - Anpassat (12:e lör → flytta tidigare) + T2 DELÅRSBOKSLUT
             8: {
                 dagar: [9, 10, 11],
                 standard: false,
                 forklaring: 'Lördag 12 september – mötena flyttas tidigare.',
-                detalj: '12:e september är lördag. Mötena flyttas till onsdag 9:e, torsdag 10:e och fredag 11:e.'
+                detalj: '12:e september är lördag. Mötena flyttas till onsdag 9:e, torsdag 10:e och fredag 11:e.',
+                tertial: 'T2',
+                tertialInfo: '📊 DELÅRSBOKSLUT T2 – Sammanställning av andra tertialet (maj–augusti)'
             },
             
             // OKTOBER - Anpassat (10:e lör, 11:e sön → dela upp)
@@ -1423,12 +1547,15 @@
             const granskadManadIndex = manad === 0 ? 11 : manad - 1;
             const granskadManad = MANAD_NAMN[granskadManadIndex];
             
+            // UPPDATERING 2026-02-02: Inkludera tertialbokslut-information
             return {
                 bokningar: bokningar,
                 standard: data.standard,
                 forklaring: data.forklaring,
                 detalj: data.detalj,
-                granskadManad: granskadManad
+                granskadManad: granskadManad,
+                tertial: data.tertial || null,
+                tertialInfo: data.tertialInfo || null
             };
         }
         
@@ -1451,14 +1578,18 @@
             });
             
             // Börja bygga HTML för månadskortet
-            const headerClass = motesdata.standard ? '' : 'adjusted';
-            const cardClass = motesdata.standard ? '' : 'has-adjustment';
-            const adjustmentBadge = motesdata.standard ? '' : '<span class="adjustment-badge">Anpassad</span>';
+            // UPPDATERING 2026-02-02: Lägg till tertial-markering
+            const isTertial = motesdata.tertial ? true : false;
+            const tertialBadge = motesdata.tertial ? `<span class="tertial-badge">${motesdata.tertial}</span>` : '';
+            
+            const headerClass = isTertial ? 'tertial' : (motesdata.standard ? '' : 'adjusted');
+            const cardClass = isTertial ? 'tertial-month' : (motesdata.standard ? '' : 'has-adjustment');
+            const adjustmentBadge = (!isTertial && !motesdata.standard) ? '<span class="adjustment-badge">Anpassad</span>' : '';
             
             let html = `
                 <div class="month-card ${cardClass}">
                     <div class="month-header ${headerClass}">
-                        <h3>${MANAD_NAMN[manad]} ${adjustmentBadge}</h3>
+                        <h3>${MANAD_NAMN[manad]} ${adjustmentBadge}${tertialBadge}</h3>
                         <span class="review-period">Granskar: ${motesdata.granskadManad}</span>
                     </div>
                     <div class="month-body">
@@ -1490,21 +1621,33 @@
                 if (bokning) {
                     // Detta är en mötesdag
                     klasser.push('has-meetings');
-                    if (!motesdata.standard) {
+                    
+                    // UPPDATERING 2026-02-02: Lägg till tertial-klass om det är tertialbokslut
+                    if (motesdata.tertial) {
+                        klasser.push('tertial');
+                    } else if (!motesdata.standard) {
                         klasser.push('adjusted');
                     }
                     
                     // Skapa tooltip
-                    const regelTyp = motesdata.standard ? 'Standarddatum' : 'Anpassat datum';
+                    const regelTyp = motesdata.tertial ? motesdata.tertialInfo : 
+                                   (motesdata.standard ? 'Standarddatum' : 'Anpassat datum');
                     const motesLista = bokning.moten.map(m => m.namn).join(' + ');
+                    
+                    // Extra tooltip-rad för tertialbokslut
+                    const tertialExtra = motesdata.tertial ? 
+                        `<div class="tooltip-rule" style="background: rgba(212, 175, 55, 0.1); padding: 0.5rem; margin-top: 0.5rem; border-radius: 4px;">
+                            <strong>⭐ VIKTIGT:</strong> ${motesdata.tertialInfo}
+                        </div>` : '';
                     
                     tooltip = `
                         <div class="tooltip">
                             <div class="tooltip-title">Dag ${bokning.dagNr}: ${motesLista}</div>
                             <div>${bokning.veckodag} ${dag} ${MANAD_NAMN[manad]}</div>
                             <div class="tooltip-rule">
-                                <strong>${regelTyp}:</strong> ${motesdata.forklaring}
+                                <strong>${motesdata.tertial ? '📊 Tertialbokslut' : regelTyp}:</strong> ${motesdata.forklaring}
                             </div>
+                            ${tertialExtra}
                         </div>
                     `;
                     
@@ -1533,8 +1676,15 @@
                         <div class="month-meetings">
             `;
             
-            // Lägg till förklaringsruta om det är anpassat schema
-            if (!motesdata.standard) {
+            // UPPDATERING 2026-02-02: Lägg till tertial-ruta om det är tertialbokslut
+            if (motesdata.tertial) {
+                html += `
+                    <div class="adjustment-note" style="background: var(--color-tertial-bg); border-left-color: var(--color-tertial);">
+                        <strong style="color: var(--color-tertial);">⭐ ${motesdata.tertialInfo}</strong>
+                    </div>
+                `;
+            } else if (!motesdata.standard) {
+                // Lägg till förklaringsruta om det är anpassat schema (men inte tertial)
                 html += `
                     <div class="adjustment-note">
                         <strong>⚠️ Anpassat schema:</strong> ${motesdata.forklaring}
@@ -1544,7 +1694,7 @@
             
             // Lägg till mötesdetaljer för varje bokad dag
             motesdata.bokningar.forEach((bokning) => {
-                const badgeClass = motesdata.standard ? '' : 'adjusted';
+                const badgeClass = motesdata.tertial ? 'tertial' : (motesdata.standard ? '' : 'adjusted');
                 const veckodagCapitalized = bokning.veckodag.charAt(0).toUpperCase() + bokning.veckodag.slice(1);
                 
                 html += `
@@ -1615,17 +1765,31 @@
             // Sätt titeln
             const veckodagCapitalized = bokning.veckodag.charAt(0).toUpperCase() + bokning.veckodag.slice(1);
             modalTitle.textContent = `${veckodagCapitalized} ${dag} ${MANAD_NAMN[manad]} 2026`;
-            modalSubtitle.textContent = `Uppföljning av resultat för ${motesdata.granskadManad}`;
             
-            // Visa regelrutan
-            const regelKlass = motesdata.standard ? 'standard' : '';
-            const regelTyp = motesdata.standard ? '✓ Standardregel' : '⚠️ Anpassat schema';
+            // UPPDATERING 2026-02-02: Lägg till tertialbokslut-info i subtitle
+            const subtitleText = motesdata.tertial ? 
+                `${motesdata.tertialInfo}` : 
+                `Uppföljning av resultat för ${motesdata.granskadManad}`;
+            modalSubtitle.textContent = subtitleText;
+            
+            // Visa regelrutan med tertial-markering
+            const regelKlass = motesdata.tertial ? 'tertial' : (motesdata.standard ? 'standard' : '');
+            const regelTyp = motesdata.tertial ? '📊 TERTIALBOKSLUT' : 
+                           (motesdata.standard ? '✓ Standardregel' : '⚠️ Anpassat schema');
+            
+            // Extra tertial-varning om det är tertialbokslut
+            const tertialWarning = motesdata.tertial ? 
+                `<div style="background: var(--color-tertial-bg); border-left: 4px solid var(--color-tertial); padding: 1rem; margin-top: 1rem; border-radius: 8px;">
+                    <strong style="color: var(--color-tertial);">⭐ EXTRA VIKTIGT:</strong><br>
+                    ${motesdata.tertialInfo}
+                </div>` : '';
             
             modalRuleBox.innerHTML = `
                 <div class="modal-rule-box ${regelKlass}">
                     <h4>${regelTyp}</h4>
                     <p>${motesdata.detalj}</p>
                 </div>
+                ${tertialWarning}
             `;
             
             // Bygg mötesinnehållet
